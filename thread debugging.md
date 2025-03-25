@@ -1,6 +1,5 @@
 #thread #debuging
 
-
 ## Using `top` to Monitor Threads
 
 When debugging multi-threaded programs, `top` can help monitor individual threads within a process. You can launch your program in the background and immediately attach `top` to it:
