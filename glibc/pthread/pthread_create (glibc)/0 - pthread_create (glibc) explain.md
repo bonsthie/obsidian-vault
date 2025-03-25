@@ -1,7 +1,7 @@
 #glibc #Breakdown #thread #pthread
 
 This document provides a detailed breakdown of the internal `__pthread_create_2_1` function from **glibc**, which is responsible for thread creation in POSIX-compliant systems.  
-`__pthread_create_2_1` is the internal name for the `pthread_create` function.
+`__pthread_create_2_1` is the internal name for the `pthread_create` function. you can find the entire source code in glibc/[nptl](ntpl%20folder)/pthread_create.c or in [here](pthread_create%20(glibc)%20code.md)
 
 Each major segment of the function is listed below with a short explanation and a link to a more detailed page in the same folder.
 

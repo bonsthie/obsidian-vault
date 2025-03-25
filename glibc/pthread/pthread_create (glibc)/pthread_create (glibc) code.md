@@ -1,5 +1,7 @@
 #glibc #Breakdown #thread #pthread
 
+glibc/[nptl](ntpl%20folder)/pthread_create.c
+
 ```c
 int
 __pthread_create_2_1 (pthread_t *newthread, const pthread_attr_t *attr,
