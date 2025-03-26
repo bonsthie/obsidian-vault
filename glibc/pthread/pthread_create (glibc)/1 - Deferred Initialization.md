@@ -100,7 +100,7 @@ This code installs a **signal handler** for the private internal signal `SIGSETX
 
 In a multi-threaded process, these syscalls must apply to **every thread**, not just the caller. So glibc sends `SIGSETXID` to all threads. Each thread handles it using the function:
 
-👉 [`__nptl_setxid_sighandler`](https://chatgpt.com/c/__nptl_setxid_sighandler)
+👉 [`__nptl_setxid_sighandler`](__nptl_setxid_sighandler)
 
 ---
 
