@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "glibc/pthread/pthread_create (glibc)/2 - Thread Attribute Handling.md",
+                "file": "tls.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2 - Thread Attribute Handling"
+              "title": "tls"
             }
           }
         ]
@@ -94,17 +94,17 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Untitled.md",
-                "collapseAll": false,
+                "file": "tls.md",
+                "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
-                "backlinkCollapsed": false,
+                "backlinkCollapsed": true,
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Untitled"
+              "title": "Backlinks for tls"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Untitled.md",
+                "file": "tls.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Untitled"
+              "title": "Outgoing links from tls"
             }
           },
           {
@@ -150,8 +150,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -165,30 +164,35 @@
   },
   "active": "2d6a44c7bf9d145d",
   "lastOpenFiles": [
-    "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
-    "glibc/pthread/pthread_create (glibc)/2 - Thread Attribute Handling.md",
+    "glibc/pthread/allocate_stack_thread_code.md",
+    "glibc/pthread/allocate_stack_thread.md",
     "glibc/pthread/pthread_create (glibc)/3 - Stack and Thread Descriptor Allocation.md",
-    "glibc/pthread/pthread_create (glibc)/pthread_create (glibc) code.md",
-    "glibc/pthread/pthread_create (glibc)/0 - pthread_create (glibc) explain.md",
     "cntr.md",
     "glibc/__nptl_setxid_sighandler.md",
-    "UID GID.md",
+    "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
     "glibc/ntpl folder.md",
-    "glibc/pthread/pthread_create (glibc)/5 - Scheduling Parameter Determination.md",
+    "UID GID.md",
+    "glibc/pthread/pthread_create (glibc)/0 - pthread_create (glibc) explain.md",
+    "glibc/__libc_setup_tls.md",
+    "elf.md",
+    "glibc/pthread/pthread_create (glibc)/7 - Thread Creation and Debug Event Reporting.md",
+    "glibc/__libc_setup_tls_code.md",
+    "glibc/csu folder.md",
+    "glibc/pthread/pthread_create (glibc)/2 - Thread Attribute Handling.md",
+    "tls.md",
+    "glibc/pthread/pthread_create (glibc)/4 - TCB and Thread Descriptor Initialization.md",
+    "TCB.md",
+    "glibc/pthread/pthread_create (glibc)/pthread_create (glibc) code.md",
     "glibc/pthread/pthread_create (glibc)/8 - Post-Creation Signal Restoration and Error Handling.md",
+    "glibc/pthread/pthread_create (glibc)/6 - Thread Count Management and Signal Blocking.md",
+    "glibc/pthread/pthread_create (glibc)/5 - Scheduling Parameter Determination.md",
+    "glibc/init_static_tls.md",
     "glibc/pthread/pthread_create (glibc)/9 - Finalization and Cleanup.md",
+    "().md",
     "0 - pthread_create (glibc) explain,.md",
     "glibc",
-    "\"1.md",
-    "1.md",
-    "glibc/pthread/pthread_create (glibc)/6 - Thread Count Management and Signal Blocking.md",
-    "glibc/pthread/pthread_create (glibc)/7 - Thread Creation and Debug Event Reporting.md",
-    "thread debugging.md",
-    "glibc/pthread/pthread_create (glibc)/4 - TCB and Thread Descriptor Initialization.md",
     "glibc/pthread/pthread_create (glibc)",
     "pthread_create deferred Initialization",
-    "glibc/pthread",
-    "create a link.md",
-    "Welcome.md"
+    "glibc/pthread"
   ]
 }
