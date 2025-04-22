@@ -13,15 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "tls.md",
+                "file": "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "tls"
+              "title": "1 - Deferred Initialization"
+            }
+          },
+          {
+            "id": "03e3956f6c21fa51",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -94,7 +105,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "tls.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +114,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for tls"
+              "title": "Backlinks"
             }
           },
           {
@@ -113,12 +123,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "tls.md",
+                "file": "index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from tls"
+              "title": "Outgoing links from index"
             }
           },
           {
@@ -162,34 +172,34 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2d6a44c7bf9d145d",
+  "active": "03e3956f6c21fa51",
   "lastOpenFiles": [
+    "tls.md",
+    "glibc/pthread/pthread_create (glibc)/2 - Thread Attribute Handling.md",
+    "index.md",
+    "glibc/pthread/pthread_create (glibc)/0 - pthread_create (glibc) explain.md",
+    "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
+    "glibc/pthread/pthread_create (glibc)/4 - TCB and Thread Descriptor Initialization.md",
+    "glibc/pthread/pthread_create (glibc)/5 - Scheduling Parameter Determination.md",
     "glibc/pthread/allocate_stack_thread_code.md",
     "glibc/pthread/allocate_stack_thread.md",
     "glibc/pthread/pthread_create (glibc)/3 - Stack and Thread Descriptor Allocation.md",
     "cntr.md",
     "glibc/__nptl_setxid_sighandler.md",
-    "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
     "glibc/ntpl folder.md",
     "UID GID.md",
-    "glibc/pthread/pthread_create (glibc)/0 - pthread_create (glibc) explain.md",
     "glibc/__libc_setup_tls.md",
     "elf.md",
     "glibc/pthread/pthread_create (glibc)/7 - Thread Creation and Debug Event Reporting.md",
     "glibc/__libc_setup_tls_code.md",
     "glibc/csu folder.md",
-    "glibc/pthread/pthread_create (glibc)/2 - Thread Attribute Handling.md",
-    "tls.md",
-    "glibc/pthread/pthread_create (glibc)/4 - TCB and Thread Descriptor Initialization.md",
     "TCB.md",
     "glibc/pthread/pthread_create (glibc)/pthread_create (glibc) code.md",
     "glibc/pthread/pthread_create (glibc)/8 - Post-Creation Signal Restoration and Error Handling.md",
     "glibc/pthread/pthread_create (glibc)/6 - Thread Count Management and Signal Blocking.md",
-    "glibc/pthread/pthread_create (glibc)/5 - Scheduling Parameter Determination.md",
     "glibc/init_static_tls.md",
     "glibc/pthread/pthread_create (glibc)/9 - Finalization and Cleanup.md",
     "().md",
-    "0 - pthread_create (glibc) explain,.md",
     "glibc",
     "glibc/pthread/pthread_create (glibc)",
     "pthread_create deferred Initialization",
