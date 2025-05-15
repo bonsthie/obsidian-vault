@@ -7,6 +7,7 @@
 * get the program name (e.g. `bin/clang`)
 * determine if args are MSVC-style (`clang-cl` mode)
 * `expandResponseFiles` splice tokens from any `@file` entries into the argument list
+* if that a `-cc1` job (that we will see how they are created after) -> ExecuteCC1Tool
 * parse early settings like `-canonical-prefixes` / `-no-canonical-prefixes` (control resolving `.`/`..` in paths)
 * handle CL-mode env vars (`CL` and `_CL_`) for MSVC-style overrides
 * apply `CCC_OVERRIDE_OPTIONS` overrides (e.g. `CCC_OVERRIDE_OPTIONS="# O0 +-g"`) on the raw args list
@@ -83,8 +84,32 @@
 * **invoke phases** (preprocess → compile → assemble → link)
 * **architecture-specific settings** (\~50 lines)
 
-* **BuildJobs(\*C)**: schedule actual compile processes (the reall shiitt will start be patient)
+* **BuildJobs(\*C)**: schedule actual compile processes
 
 # BuildJobs
 
+Action - Represent an abstract compilation step to perform.
+example :
+```
+clang foo.c bar.c
+```
 
+- create a reading job for foo.c
+- create a reading job for bar.c
+- create a compile job for foo.c
+- create a compile job for bar.c
+- create a link job to link foo.o bar.o
+
+
+* count number of output in the action list (-o and .ifs/.ifso)
+* get the target and do specifics for macos MachO binary
+* for all Action
+    * see if that the liking process get the name
+    * build the job for the action
+* disable integrated-cc1 if the number of jobs is > 1
+* print stats
+* return is an error hass occure and or the flag to silent unused driver arg
+* silent some args that don't need warning
+* list all args that are unused
+
+# Compilation
