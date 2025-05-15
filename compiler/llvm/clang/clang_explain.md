@@ -145,7 +145,7 @@ clang foo.c bar.c
 7. **Suppress** warnings for flags like `-fdriver-only`, `-###`, etc.
 8. **Warn** on any remaining unclaimed or unsupported arguments
 
-## ExecuteCompilation
+# **ExecuteCompilation**
 
 * **LogOnly mode**: if `-fdriver-only`, print jobs (`-v`) then execute in *log-only* mode.
 * **Dry run**: if `-###`, print jobs and exit based on diagnostic errors.
@@ -157,3 +157,55 @@ clang foo.c bar.c
 * **Signal handling**: ignore `EX_IOERR` (SIGPIPE) without printing diagnostics.
 * **Detailed diagnostics**: if a failing tool lacks good diagnostics or exit code ≠1, emit `err_drv_command_failed` or `err_drv_command_signalled`.
 * **Return code**: propagate the first non-zero or special exit code in `Res`.
+
+#  **ExecuteJobs**
+
+In Unix, all jobs are executed regardless of whether an error occurs
+In MSVC’s `CLMode`, jobs stop when an error occurs
+
+on all the jobs :
+ * call the function ExecuteCommand
+ * if fail store in the failing command vector
+    * if CLMode return 
+
+#   **ExecuteCommand**
+
+* print if `CC_PRINT_OPTIONS`
+* Execute `C.Execute`
+* manage error
+
+#   **Execute**
+
+* **Print file names** for logging and diagnostics.
+* **Construct `Argv`**:
+
+  * If no response file: push `Executable`, optional `PrependArg`, then `Arguments`, terminate with `nullptr`.
+  * If a response file is needed:
+
+    1. **Serialize** arguments into `RespContents` via `writeResponseFile`.
+    2. **Build** `Argv` for the response file (`@file` syntax).
+    3. **Write** the response file with proper encoding; on error, set `ErrMsg`/`ExecutionFailed` and return `-1`.
+* **Prepare environment** (`Env`) if any variables are set.
+* **Convert** `Argv` array to `StringRef` array (`Args`).
+* **Handle redirects**:
+
+  * If `RedirectFiles` are present, convert to `std::optional<StringRef>` list and call `ExecuteAndWait` with those.
+  * Otherwise, call `ExecuteAndWait` with the provided `Redirects`.
+* **Execute and wait**:
+
+  * `llvm::sys::ExecuteAndWait` forks, execs `Executable` with `Args` and `Env`, applies redirects, collects exit code in `ErrMsg`/`ExecutionFailed`, and records `ProcStat`.
+* **Return** the child process exit code (or `-1` on exec failure).
+
+# **Going back to the clang_start**
+
+ok so lets resume we :
+ * created the driver settings
+ * with that we created the Compilation Settings
+ * created actions for each part of the compilation
+ * created a list of jobs from the list of actions
+
+now it's time to execute the jobs !!!
+
+in the begining we talk about a if the first args of the function is -cc1
+that it we are building guys !!!
+
