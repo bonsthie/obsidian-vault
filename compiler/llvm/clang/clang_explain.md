@@ -125,8 +125,8 @@ Compilation::Compilation(const Driver &D,
 clang foo.c bar.c
 ```
 
-* **InputAction(foo.c)**: wrap `foo.c`
-* **InputAction(bar.c)**: wrap `bar.c`
+* **InputAction(foo.c)**: encapsulates the source file `foo.c`
+* **InputAction(bar.c)**: encapsulates the source file `bar.c`
 * **CompileJobAction(foo.c → foo.o)**: compile `foo.c`
 * **CompileJobAction(bar.c → bar.o)**: compile `bar.c`
 * **LinkJobAction(foo.o, bar.o → a.out)**: link objects
@@ -208,4 +208,50 @@ now it's time to execute the jobs !!!
 
 in the begining we talk about a if the first args of the function is -cc1
 that it we are building guys !!!
+
+#   **ExecuteCC1Tool**
+
+* tokenize the cmd line 
+* redirect on the right cc1
+
+# **cc1_main**
+
+* init a CompilerInstance() and a DiagnosticIDs() instance
+
+> * CompilerInstance
+> this is the class responsible for handeling the `cc1`  part of clang
+> it containt all the class needed by the compilation
+
+> * DiagnosticIDs
+> talk for imself that the class responsible for writing compilation diagnostic
+
+* init PCH format that are precompile header
+* init all taget base function
+* dig setup
+* fill the `CompilerInvocation` of the `CompilerInstance` that contain all compiler settings and little check on args list
+* timeTraceProfile init if need
+* print of clang cpu/stats
+* init of the dig for the `CompilerInstance`
+* install in the instance the llvm backend diag
+* execute `ExecuteCompilerInvocation`
+* handle error and timer
+
+# **ExecuteCompilerInvocation**
+
+* handle basic `-help` / `-version`
+* load clang user plugin
+* handle `-mllvm`
+* optional satic analyser stuf
+* error checkup
+* creation of the `FontendAction` (bind the right ExecuteAction function on the FrontedAction)
+* execute the `FontendAction`
+
+# **ExecuteAction**
+
+* parse the code
+* go to execute
+
+# **Execute**
+
+run executeAction that is bind to the right backend
 
