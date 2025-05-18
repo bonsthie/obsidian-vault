@@ -248,10 +248,23 @@ that it we are building guys !!!
 
 # **ExecuteAction**
 
-* parse the code
-* go to execute
+* **Preconditions**: Verify diagnostics are initialized and help/version have been handled.
+* **Diagnostics cleanup guard**: Ensure `getDiagnosticClient().finish()` runs on exit.
+* **Verbose stream**: Obtain the verbose output stream (`OS`).
+* **Prepare action**: Invoke `Act.PrepareToExecute(*this)`, which sets up any internal state required by the action; if it returns `false`, the action cannot run and `ExecuteAction` immediately returns `false` to signal failure (rather than continuing into an invalid state).
+* **Create target**: Initialize the compilation target (the architecture, vendor, OS, and ABI settings—e.g., `x86_64-unknown-linux-gnu`), configuring TargetInfo/TargetMachine; abort on failure.
+* **ObjC rewrite patch**: For Objective-C (`ObjC`) rewriting actions (e.g., `RewriteObjC`), adjust the built-in ObjCBool type (disable signed char) to match the ObjC ABI.
+* **Verbose/stats flags**: Print version info if verbose, enable stats if requested.
+* **Sort codegen tables**: Sort TOC (`Table of Contents`) and NoTOC variable lists (used on targets like PowerPC64 for PIC data) so lookups use binary search for efficient codegen decisions.
+* **Process inputs**: For each input file, clear IDs, run `BeginSourceFile`, `Execute`, and `EndSourceFile`.
+* **Print diagnostic stats**: Emit any collected diagnostic statistics.
+* **Dump stats to file**: If `StatsFile` set, open (or append) and write JSON stats, warning on error.
+* **Return success**: Return true if no errors were reported, false otherwise.
 
 # **Execute**
 
-run executeAction that is bind to the right backend
+* **Get CompilerInstance**
+* **ExecuteAction**: Invoke the action-specific frontend logic (`ExecuteAction()`).
+* **Rebuild Global Module Index**: If `CI.shouldBuildGlobalModuleIndex()` and file manager/preprocessor are present, fetch `Cache = CI.getPreprocessor().getHeaderSearchInfo().getModuleCachePath()` and, if non-empty, call `GlobalModuleIndex::writeIndex`. On error, consume it silently.
+* **Return success**: Always return `llvm::Error::success()` (no error propagation).
 
