@@ -58,41 +58,27 @@
   3. Tail overrides (`CfgOptionsTail`)
 
 * **Fuse** head + user + tail into a single argument set
-
 * **Translate** input args via `TranslateInputArgs(*UArgs)` → `TranslatedArgs`
-
 * **Claim** flags to suppress unused warnings:
-
   * `-canonical-prefixes` / `-no-canonical-prefixes`
   * `-fintegrated-cc1` / `-fno-integrated-cc1`
-
 * **Handle** hidden debug flags (`-ccc-print-phases`, `-ccc-print-bindings`)
-
 * **Setup** MSVC or DXC/HLSL→Vulkan/SPIR-V modes
-
 * **Configure** target and install directories (`COMPILER_PATH`, etc.)
-
 * **Compute** `TargetTriple` from `--target`, `-m*`, driver-mode
-
 * **Select** toolchain via `getToolChain`
-
 * **Validate/warn** on triple vs. object-format mismatches
-
 * **Append** multilib macros from `TC.getMultilibMacroDefinesStr`
-
 * **Invoke** phases: preprocess → compile → assemble → link
-
 * **Apply** architecture-specific settings (\~50 lines)
-
 * **Initialize** the `Compilation` class
-
 * **Call** `BuildJobs(*C)` to schedule compile processes
 
 ---
 
 ## **Compilation** class
 
-```cpp
+``` cpp
 Compilation::Compilation(const Driver &D,
                          const ToolChain &_DefaultToolchain,
                          InputArgList *_Args,
@@ -180,21 +166,17 @@ on all the jobs :
 
 * **Print file names** for logging and diagnostics.
 * **Construct `Argv`**:
-
   * If no response file: push `Executable`, optional `PrependArg`, then `Arguments`, terminate with `nullptr`.
   * If a response file is needed:
-
     1. **Serialize** arguments into `RespContents` via `writeResponseFile`.
     2. **Build** `Argv` for the response file (`@file` syntax).
     3. **Write** the response file with proper encoding; on error, set `ErrMsg`/`ExecutionFailed` and return `-1`.
 * **Prepare environment** (`Env`) if any variables are set.
 * **Convert** `Argv` array to `StringRef` array (`Args`).
 * **Handle redirects**:
-
   * If `RedirectFiles` are present, convert to `std::optional<StringRef>` list and call `ExecuteAndWait` with those.
   * Otherwise, call `ExecuteAndWait` with the provided `Redirects`.
 * **Execute and wait**:
-
   * `llvm::sys::ExecuteAndWait` forks, execs `Executable` with `Args` and `Env`, applies redirects, collects exit code in `ErrMsg`/`ExecutionFailed`, and records `ProcStat`.
 * **Return** the child process exit code (or `-1` on exec failure).
 
@@ -223,7 +205,6 @@ that it we are building guys !!!
 > * CompilerInstance
 > this is the class responsible for handeling the `cc1`  part of clang
 > it containt all the class needed by the compilation
-
 > * DiagnosticIDs
 > talk for imself that the class responsible for writing compilation diagnostic
 
@@ -302,3 +283,32 @@ EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
 
 > note : all the CodeGenAction are all the same with the `llvm::LLVMContext` (`Backend_EmitLL`) that change
 
+## **CodeGenAction::ExecuteAction**
+
+* **Wrapper over AST path**: Delegates all non-LLVM-IR inputs straight to `ASTFrontendAction::ExecuteAction()`.
+* **LLVM IR handling**: Intercepts LLVM IR inputs and runs the IR-specific emission pipeline (bypassing the AST frontend).
+
+> We’re not detailing the LLVM IR setup and configuration steps, as those belong to the backend-specific flow.
+
+## **ASTFrontendAction::ExecuteAction**
+
+* **Preprocessor check**: Return early if the preprocessor isn’t initialized.
+* **Stack setup**: Mark bottom of the stack to guard against deep AST recursion.
+* **Code completion**: If requested, install a `CodeCompleteConsumer` for IDE-style suggestions.
+* **Semantic analysis init**: Create/configure the `Sema` object to drive name lookup and type checking.
+* **Parse AST**: Invoke `ParseAST`, which lexes, parses, and executes the specific frontend action logic on the AST.
+
+## **clang::ParseAST**
+
+* setup stats system
+* init Sema
+* init the `ASTConsumer` from the `Sema` so he can read the ast
+* Construct the Parser (linking Preprocessor + Sema) and register crash-recovery cleanup.
+* handle crash
+* check if lexer avaible
+* parsing logic int the HandleTopLevelDecl that in your case emit llvm ir
+* process things like pragma weak
+* finialize (need more desc)
+* print stats
+
+## parsing logic
