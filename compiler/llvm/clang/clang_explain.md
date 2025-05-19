@@ -180,6 +180,41 @@ on all the jobs :
   * `llvm::sys::ExecuteAndWait` forks, execs `Executable` with `Args` and `Env`, applies redirects, collects exit code in `ErrMsg`/`ExecutionFailed`, and records `ProcStat`.
 * **Return** the child process exit code (or `-1` on exec failure).
 
+# **cc1**
+
+## **main class explain**
+before we satrt if think is best that we explain all the main class in the compilation
+`CompilerInstance` `FileManager`, `SourceManager`, `PreProcessor`, `Lexer`, `Sema`, `Parser`
+this is more of a reference part to better undertand the rest
+
+### **`CompilerInstance`**
+this is the class responsible for handeling the `cc1`  part of clang
+it containt all the class needed by the compilation
+
+main class inside the `CompilerInstance`
+- `FileManager`
+- `SourceManager`
+- `TargetInfo`
+- `PreProcessor`
+- `ASTContext` `ASTConsumer` `ASTReader`
+
+function :
+``` c
+bool CompilerInstance::ExecuteAction(FrontendAction &Act);
+```
+
+### **`FileManager`**
+
+### **`SourceManager`**
+
+### **`PreProcessor`**
+
+### **`Lexer`**
+
+### **`Sema`**
+
+### **`Parser`**
+
 ## **Going back to the clang_start**
 
 ok so lets resume we :
@@ -311,4 +346,5 @@ EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
 * finialize (need more desc)
 * print stats
 
-## parsing logic
+
+## parsing logic overview
