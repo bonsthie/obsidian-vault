@@ -1,4 +1,6 @@
-# **clang\_main**
+# **SETUP**
+
+## **clang\_main**
 
 * **Setup bug report message**
 * On Windows, reopen any missing `stdin`/`stdout`/`stderr` handles to `NUL`
@@ -32,7 +34,7 @@
 
 ---
 
-# **BuildCompilation**
+## **BuildCompilation**
 
 * **Get driver mode** (`--driver-mode=g++`)
 
@@ -88,7 +90,7 @@
 
 ---
 
-# **Compilation** class
+## **Compilation** class
 
 ```cpp
 Compilation::Compilation(const Driver &D,
@@ -115,7 +117,7 @@ Compilation::Compilation(const Driver &D,
 
 ---
 
-# **BuildJobs**
+## **BuildJobs**
 
 > **Action**: An abstract compilation step (a node in the DAG).
 
@@ -145,7 +147,7 @@ clang foo.c bar.c
 7. **Suppress** warnings for flags like `-fdriver-only`, `-###`, etc.
 8. **Warn** on any remaining unclaimed or unsupported arguments
 
-# **ExecuteCompilation**
+## **ExecuteCompilation**
 
 * **LogOnly mode**: if `-fdriver-only`, print jobs (`-v`) then execute in *log-only* mode.
 * **Dry run**: if `-###`, print jobs and exit based on diagnostic errors.
@@ -158,7 +160,7 @@ clang foo.c bar.c
 * **Detailed diagnostics**: if a failing tool lacks good diagnostics or exit code ≠1, emit `err_drv_command_failed` or `err_drv_command_signalled`.
 * **Return code**: propagate the first non-zero or special exit code in `Res`.
 
-#  **ExecuteJobs**
+##  **ExecuteJobs**
 
 In Unix, all jobs are executed regardless of whether an error occurs
 In MSVC’s `CLMode`, jobs stop when an error occurs
@@ -168,13 +170,13 @@ on all the jobs :
  * if fail store in the failing command vector
     * if CLMode return 
 
-#   **ExecuteCommand**
+##   **ExecuteCommand**
 
 * print if `CC_PRINT_OPTIONS`
 * Execute `C.Execute`
 * manage error
 
-#   **Execute**
+##   **Execute**
 
 * **Print file names** for logging and diagnostics.
 * **Construct `Argv`**:
@@ -196,7 +198,7 @@ on all the jobs :
   * `llvm::sys::ExecuteAndWait` forks, execs `Executable` with `Args` and `Env`, applies redirects, collects exit code in `ErrMsg`/`ExecutionFailed`, and records `ProcStat`.
 * **Return** the child process exit code (or `-1` on exec failure).
 
-# **Going back to the clang_start**
+## **Going back to the clang_start**
 
 ok so lets resume we :
  * created the driver settings
@@ -209,12 +211,12 @@ now it's time to execute the jobs !!!
 in the begining we talk about a if the first args of the function is -cc1
 that it we are building guys !!!
 
-#   **ExecuteCC1Tool**
+##   **ExecuteCC1Tool**
 
 * tokenize the cmd line 
 * redirect on the right cc1
 
-# **cc1_main**
+## **cc1_main**
 
 * init a CompilerInstance() and a DiagnosticIDs() instance
 
@@ -236,7 +238,7 @@ that it we are building guys !!!
 * execute `ExecuteCompilerInvocation`
 * handle error and timer
 
-# **ExecuteCompilerInvocation**
+## **ExecuteCompilerInvocation**
 
 * handle basic `-help` / `-version`
 * load clang user plugin
@@ -246,7 +248,7 @@ that it we are building guys !!!
 * creation of the `FontendAction` (bind the right ExecuteAction function on the FrontedAction)
 * execute the `FontendAction`
 
-# **ExecuteAction**
+## **ExecuteAction**
 
 * **Preconditions**: Verify diagnostics are initialized and help/version have been handled.
 * **Diagnostics cleanup guard**: Ensure `getDiagnosticClient().finish()` runs on exit.
@@ -261,10 +263,42 @@ that it we are building guys !!!
 * **Dump stats to file**: If `StatsFile` set, open (or append) and write JSON stats, warning on error.
 * **Return success**: Return true if no errors were reported, false otherwise.
 
-# **Execute**
+## **Execute**
 
 * **Get CompilerInstance**
 * **ExecuteAction**: Invoke the action-specific frontend logic (`ExecuteAction()`).
 * **Rebuild Global Module Index**: If `CI.shouldBuildGlobalModuleIndex()` and file manager/preprocessor are present, fetch `Cache = CI.getPreprocessor().getHeaderSearchInfo().getModuleCachePath()` and, if non-empty, call `GlobalModuleIndex::writeIndex`. On error, consume it silently.
 * **Return success**: Always return `llvm::Error::success()` (no error propagation).
+
+# **ASTcreation**
+
+## **FrontendAction Hierarchy**
+
+Clang’s frontend actions all inherit from the abstract base `FrontendAction`, providing a uniform `ExecuteAction` entry point. Key subclasses include:
+
+* **ASTFrontendAction**: Runs after parsing to operate on the AST (analysis, transformations).
+* **PreprocessorFrontendAction**: Hooks into the preprocessor stage (token processing before parsing).
+* **CodeGenAction**: Coordinates code generation backends (e.g., IR emission, object code output).
+* **Other FrontendActions**: Miscellaneous actions (e.g., `MergeModuleAction`, `PluginAction`).
+
+Below is the `EmitLLVMAction`, which inherits from `CodeGenAction` and emits LLVM IR:
+
+```cpp
+class EmitLLVMAction : public CodeGenAction {
+  virtual void anchor();              // Ensure vtable emission
+public:
+  EmitLLVMAction(llvm::LLVMContext *_VMContext = nullptr);
+};
+
+void EmitLLVMAction::anchor() { }
+EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
+  : CodeGenAction(Backend_EmitLL, _VMContext) {}
+```
+
+**What this does**:
+
+1. **anchor()**: Defines an out‑of‑line virtual method so that the compiler emits `EmitLLVMAction`’s vtable in this translation unit.
+2. **Constructor**: Calls the `CodeGenAction` base with `Backend_EmitLL`, registering the action to generate LLVM IR into the given (or newly created) `LLVMContext`.
+
+> note : all the CodeGenAction are all the same with the `llvm::LLVMContext` (`Backend_EmitLL`) that change
 
