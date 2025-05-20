@@ -1,3 +1,11 @@
+# **clang Frontend explain**
+
+i welcome you to this walkthrough of the clang frontend execution!!! this walkthrough is mainly for me to dive into the clang source code, but if it helps others along the way, that’s a win!!!
+
+**note:** to get the most out of this guide, follow along with the source code open at your side and spot what’s happening in real time.
+
+i've added links to the github source code in each function explanation title for convenience.
+
 # **SETUP**
 
 ## **clang\_main**
@@ -13,14 +21,12 @@
 * **Parse early settings** like `-canonical-prefixes` / `-no-canonical-prefixes`
 * **Handle** CL-mode environment variables (`CL`, `_CL_`) for MSVC overrides
 * **Apply** `CCC_OVERRIDE_OPTIONS` overrides (e.g. `CCC_OVERRIDE_OPTIONS="# O0 +-g"`)
-
   * `#` silences the “### Removing …” / “### Adding …” messages
   * Replaces any `-O*` flags with `-O0`
   * Appends `-g` to the flag list
 * **GetExecutablePath**: compute the absolute or raw driver path
 * **Parse** `-fintegrated-cc1` / `-fno-integrated-cc1` to choose in-process vs. external cc1
 * **Setup** the diagnostic engine
-
   * **Parse** DiagOpts (`-Werror`, `-pedantic`, etc.)
   * **Instantiate** `TextDiagnosticPrinter` and `DiagnosticsEngine`
 * **Initialize** the filesystem VFS and process warning options
@@ -439,6 +445,5 @@ EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
 * process things like pragma weak
 * finialize (need more desc)
 * print stats
-
 
 ## parsing logic overview
