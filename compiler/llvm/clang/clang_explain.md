@@ -188,15 +188,15 @@ before we satrt if think is best that we explain all the main class in the compi
 this is more of a reference part to better undertand the rest
 
 ### **`CompilerInstance`**
-this is the class responsible for handeling the `cc1`  part of clang
+This is the class responsible for handeling the `cc1`  part of clang
 it containt all the class needed by the compilation
 
 main class inside the `CompilerInstance`
-- `FileManager`
-- `SourceManager`
-- `TargetInfo`
-- `PreProcessor`
-- `ASTContext` `ASTConsumer` `ASTReader`
+* `FileManager`
+* `SourceManager`
+* `TargetInfo`
+* `PreProcessor`
+* `ASTContext` `ASTConsumer` `ASTReader`
 
 function :
 ``` c
@@ -205,14 +205,108 @@ bool CompilerInstance::ExecuteAction(FrontendAction &Act);
 
 ### **`FileManager`**
 
+The `FileManager` class find/read file on disk or `VFS` and caches metadata open memorybuffer.
+This return a `FileEntryRef`
+> VFS: is an llvm abstraction that makes all file sources (disk files, in-memory buffers, archives) look like a single, uniform filesystem to the compiler.
+
+main members inside the `FileManager`
+
+* `FileSystem`
+* `FileSystemOptions`
+* `DenseMap` of real files by ID
+* `DenseMap` of real directories by ID
+* `SmallVector` of virtual file entries
+* `SmallVector` of virtual directory entries
+* `StringMap` for cached file lookups
+* `StringMap` for cached directory lookups
+* `OptionalFileEntryRef` for stdin
+
+function :
+
+```cpp
+llvm::Expected<FileEntryRef> FileManager::getFileRef(StringRef Filename,
+                                                    bool OpenFile = false,
+                                                    bool CacheFailure = true,
+                                                    bool IsText = true);
+```
+
 ### **`SourceManager`**
 
-### **`PreProcessor`**
+This class takes raw buffers from FileManager (`FileEntryRef`), assigns them simple integer FileIDs, and builds the data structures needed for the rest of the compiler to ask, “What line/column is offset N in FileID X?”
+
+main members inside the `SourceManager`
+
+* `SourceMgr` contains a list of `MemoryBuffer` objects (one per `FileID`)
+* `FileIDMap` mapping from buffer index to `FileEntryRef`
+* Line/column mapping tables for each buffer (e.g., `LineOffsets`)
+* Macro expansion and include-location stacks
+* `FileID` counter to assign unique IDs for each buffer
+
+function :
+
+```cpp
+/// Create a new FileID for the given FileEntryRef and return it.
+FileID SourceManager::createFileID(FileEntryRef FE,
+                                   SourceLocation Loc,
+                                   SrcMgr::CharacteristicKind K);
+
+/// Retrieve character data for a given FileID and offset.
+const char *SourceManager::getCharacterData(FileID FID, unsigned &Offset);
+```
+
+### **`Preprocessor`**
+
+This class handles all pre‐parsing work—macro definitions, `#include` directives, conditional compilation—and produces a stream of tokens for the parser.
+
+main members inside the `Preprocessor`
+
+* `HeaderSearch`            – manages search paths and maps headers to `FileEntryRef`
+* `PreprocessorOptions`     – stores flags like `-D`, `-I`, macro expansion settings
+* `IdentifierTable`         – uniquing table for identifiers and keywords
+* `Builtin::Context`        – definitions for built–in macros and keywords
+* `MacroInfoMap`            – maps macro names to their definitions (`MacroInfo`)
+* `std::vector<Lexer*>`     – stack of active `Lexer` instances (one per file)
+
+functions :
+
+```cpp
+/// Get the next token, expanding macros and handling directives.
+Token Preprocessor::Lex(Token &Tok);
+
+/// Push a new file onto the include stack, creating a fresh Lexer.
+void Preprocessor::EnterSourceFile(FileID FID, bool IsMacroFile,
+                                   llvm::MemoryBuffer *Buffer);
+```
 
 ### **`Lexer`**
 
-### **`Sema`**
+This class reads characters from a source buffer (via `SourceManager`) and produces `Token` objects for the parser.
 
+main members inside the `Lexer`
+
+* `FileID`                         – identifies the buffer being lexed
+* `SourceManager &SM`             – provides access to buffer contents and locations
+* `LangOptions &LangOpts`          – controls language-specific lexing behavior
+* `const char *BufferStart/Ptr/End` – pointers to track current position in the memory buffer
+* `Token CurToken`                 – storage for the current token
+* `unsigned CurPPEnd`              – offset for end-of-macro/file switching
+
+functions :
+
+```cpp
+/// Lex the next token from the buffer (skips whitespace/comments).
+Token Lexer::Lex(Token &Result);
+
+/// Initialize the lexer for a new buffer.
+void Lexer::Initialize(FileID FID,
+                       const LangOptions &LangOpts,
+                       SourceManager &SM,
+                       bool IsAtStartOfFile);
+```
+
+
+TODO later
+### **`Sema`**
 ### **`Parser`**
 
 ## **Going back to the clang_start**
@@ -225,7 +319,7 @@ ok so lets resume we :
 
 now it's time to execute the jobs !!!
 
-in the begining we talk about a if the first args of the function is -cc1
+in the begining we talk about a `if` the first args of the function is -cc1
 that it we are building guys !!!
 
 ##   **ExecuteCC1Tool**
