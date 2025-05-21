@@ -190,7 +190,7 @@ on all the jobs :
 
 ## **main class explain**
 before we satrt if think is best that we explain all the main class in the compilation
-`CompilerInstance` `FileManager`, `SourceManager`, `PreProcessor`, `Lexer`, `Sema`, `Parser`
+`CompilerInstance` `FileManager`, `SourceManager`, `PreProcessor`, `Lexer`
 this is more of a reference part to better undertand the rest
 
 ### **`CompilerInstance`**
@@ -309,11 +309,6 @@ void Lexer::Initialize(FileID FID,
                        SourceManager &SM,
                        bool IsAtStartOfFile);
 ```
-
-
-TODO later
-### **`Sema`**
-### **`Parser`**
 
 ## **Going back to the clang_start**
 
@@ -441,9 +436,49 @@ EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
 * Construct the Parser (linking Preprocessor + Sema) and register crash-recovery cleanup.
 * handle crash
 * check if lexer avaible
+* init the parsing logic
 * parsing logic int the HandleTopLevelDecl that in your case emit llvm ir
 * process things like pragma weak
 * finialize (need more desc)
 * print stats
 
 ## parsing logic overview
+
+``` cpp
+    for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState); !AtEOF;
+         AtEOF = P.ParseTopLevelDecl(ADecl, ImportState)) {
+
+      if (ADecl && !Consumer->HandleTopLevelDecl(ADecl.get()))
+        return;
+    }
+```
+
+this is the main parsing logic of the clang `Parser`.
+`ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the 
+
+
+TODO later
+### **`Sema`**
+### **`Parser`**
+
+### **`Scope`**
+keep track of the scope the scope we are in 
+
+``` c
+int foo() {
+    while (1) {
+        if (bar) {
+            foobar();
+        }
+    }
+}
+
+```
+`foobar` is int scope `if` that is in the scope `while` in `func` in `DeclScope` 
+
+
+### **`Parser::DeclGroupPtrTy`**
+### **`Parser::ModuleImportState `**
+### **`Token`**
+### **`ASTContext`**
+### **`ASTConsumer`**
