@@ -271,7 +271,6 @@ main members inside the `Preprocessor`
 * `IdentifierTable`         – uniquing table for identifiers and keywords
 * `Builtin::Context`        – definitions for built–in macros and keywords
 * `MacroInfoMap`            – maps macro names to their definitions (`MacroInfo`)
-* `std::vector<Lexer*>`     – stack of active `Lexer` instances (one per file)
 
 functions :
 
@@ -456,15 +455,39 @@ EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
 this is the main parsing logic of the clang `Parser`.
 `ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the 
 
-
-TODO later
-### **`Sema`**
 ### **`Parser`**
+The `Parser` class is responsible for syntactic parsing. It takes references to the `PreProcessor` and `Sema`, and drives the parsing of tokens into declarations and statements.
+
+### **`Parser::ModuleImportState`**
+
+An enum only for C++20 `module`/`import` that can only be placed at the start of a file. After the first declaration, the keywords `module`/`import` become normal identifiers that you can use.
+
+example
+``` cpp
+module;
+import foo; // valid here
+int x;
+import bar; // now invalid
+int import = 1; // valid
+```
+
+### **`Sema`**
+The `Sema` (semantic analyzer) performs semantic checks (e.g., type checking, declaration validation). It owns references to essential components used during semantic analysis:
+
+main members inside the `Sema`
+* `ASTContext` – manages all AST nodes and semantic info
+* `PreProcessor` – token stream handler
+* `LangOptions` – holds active language dialect flags
+* `DiagnosticsEngine` – emits warnings and errors
+* `SourceManager` – tracks source locations
+
 
 ### **`Scope`**
-keep track of the scope the scope we are in 
+Tracks the current scope during parsing and semantic analysis. It helps `Sema` resolve names (variables, functions, types) correctly depending on the nesting level (e.g., inside functions, loops, conditionals, or namespaces).
 
-``` c
+For example:
+
+```c
 int foo() {
     while (1) {
         if (bar) {
@@ -472,13 +495,25 @@ int foo() {
         }
     }
 }
-
 ```
-`foobar` is int scope `if` that is in the scope `while` in `func` in `DeclScope` 
+`foobar` is in the `if` scope, which is in the `while` scope, which is in the function scope.
 
+### **`Decl`**
 
-### **`Parser::DeclGroupPtrTy`**
-### **`Parser::ModuleImportState `**
-### **`Token`**
+`Decl` is the base class for all AST nodes representing C/C++ declarations (e.g., functions, variables, classes).
+All declaration nodes (like `FunctionDecl`, `VarDecl`, `RecordDecl`) derive from `Decl`.
+
+`DeclGroupRef` is a container used when multiple declarations are parsed together (e.g., `int a, b;`).
+
 ### **`ASTContext`**
+
+`ASTContext` manages the lifetime and storage of all AST nodes and semantic information. It contains information about:
+
+main members inside the `ASTContext`
+* `Decl` nodes (all AST nodes)
+* `LangOpts`
+* `TargetInfo`
+
 ### **`ASTConsumer`**
+
+A callback interface class to observe and process AST nodes as they’re built.
