@@ -6,7 +6,7 @@ i welcome you to this walkthrough of the clang frontend execution!!! this walkth
 
 i've added links to the github source code in each function explanation title for convenience.
 
-# **SETUP**
+# **Driver-Level Setup**
 
 ## **clang\_main**
 
@@ -186,7 +186,20 @@ on all the jobs :
   * `llvm::sys::ExecuteAndWait` forks, execs `Executable` with `Args` and `Env`, applies redirects, collects exit code in `ErrMsg`/`ExecutionFailed`, and records `ProcStat`.
 * **Return** the child process exit code (or `-1` on exec failure).
 
-# **cc1**
+# **Compiler Core `cc1`**
+
+## **Going back to the clang_start**
+
+ok so lets resume we :
+ * created the driver settings
+ * with that we created the Compilation Settings
+ * created actions for each part of the compilation
+ * created a list of jobs from the list of actions
+
+now it's time to execute the jobs !!!
+
+in the begining we talk about a `if` the first args of the function is -cc1
+that it we are building guys !!!
 
 ## **main class explain**
 before we satrt if think is best that we explain all the main class in the compilation
@@ -309,19 +322,6 @@ void Lexer::Initialize(FileID FID,
                        bool IsAtStartOfFile);
 ```
 
-## **Going back to the clang_start**
-
-ok so lets resume we :
- * created the driver settings
- * with that we created the Compilation Settings
- * created actions for each part of the compilation
- * created a list of jobs from the list of actions
-
-now it's time to execute the jobs !!!
-
-in the begining we talk about a `if` the first args of the function is -cc1
-that it we are building guys !!!
-
 ##   **ExecuteCC1Tool**
 
 * tokenize the cmd line 
@@ -380,7 +380,7 @@ that it we are building guys !!!
 * **Rebuild Global Module Index**: If `CI.shouldBuildGlobalModuleIndex()` and file manager/preprocessor are present, fetch `Cache = CI.getPreprocessor().getHeaderSearchInfo().getModuleCachePath()` and, if non-empty, call `GlobalModuleIndex::writeIndex`. On error, consume it silently.
 * **Return success**: Always return `llvm::Error::success()` (no error propagation).
 
-# **ASTcreation**
+# **init AST creation**
 
 ## **FrontendAction Hierarchy**
 
@@ -427,49 +427,10 @@ EmitLLVMAction::EmitLLVMAction(llvm::LLVMContext *_VMContext)
 * **Semantic analysis init**: Create/configure the `Sema` object to drive name lookup and type checking.
 * **Parse AST**: Invoke `ParseAST`, which lexes, parses, and executes the specific frontend action logic on the AST.
 
-## **clang::ParseAST**
-
-* setup stats system
-* init Sema
-* init the `ASTConsumer` from the `Sema` so he can read the ast
-* Construct the Parser (linking Preprocessor + Sema) and register crash-recovery cleanup.
-* handle crash
-* check if lexer avaible
-* init the parsing logic
-* parsing logic int the HandleTopLevelDecl that in your case emit llvm ir
-* process things like pragma weak
-* finialize (need more desc)
-* print stats
-
-## parsing logic overview
-
-``` cpp
-    for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState); !AtEOF;
-         AtEOF = P.ParseTopLevelDecl(ADecl, ImportState)) {
-
-      if (ADecl && !Consumer->HandleTopLevelDecl(ADecl.get()))
-        return;
-    }
-```
-
-this is the main parsing logic of the clang `Parser`.
-`ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the 
+# **Parsing Class**
 
 ### **`Parser`**
 The `Parser` class is responsible for syntactic parsing. It takes references to the `PreProcessor` and `Sema`, and drives the parsing of tokens into declarations and statements.
-
-### **`Parser::ModuleImportState`**
-
-An enum only for C++20 `module`/`import` that can only be placed at the start of a file. After the first declaration, the keywords `module`/`import` become normal identifiers that you can use.
-
-example
-``` cpp
-module;
-import foo; // valid here
-int x;
-import bar; // now invalid
-int import = 1; // valid
-```
 
 ### **`Sema`**
 The `Sema` (semantic analyzer) performs semantic checks (e.g., type checking, declaration validation). It owns references to essential components used during semantic analysis:
@@ -517,3 +478,48 @@ main members inside the `ASTContext`
 ### **`ASTConsumer`**
 
 A callback interface class to observe and process AST nodes as they’re built.
+
+
+## *
+
+### **`Parser::ModuleImportState`**
+
+An enum only for C++20 `module`/`import` that can only be placed at the start of a file. After the first declaration, the keywords `module`/`import` become normal identifiers that you can use.
+
+example
+``` cpp
+module;
+import foo; // valid here
+int x;
+import bar; // now invalid
+int import = 1; // valid
+```
+
+# **parsing logic overview**
+
+## **clang::ParseAST**
+
+* setup stats system
+* init Sema
+* init the `ASTConsumer` from the `Sema` so he can read the ast
+* Construct the Parser (linking Preprocessor + Sema) and register crash-recovery cleanup.
+* handle crash
+* check if lexer avaible
+* init the parsing logic
+* parsing logic int the HandleTopLevelDecl that in your case emit llvm ir
+* process things like pragma weak
+* finialize (need more desc)
+* print stats
+
+
+``` cpp
+    for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState); !AtEOF;
+         AtEOF = P.ParseTopLevelDecl(ADecl, ImportState)) {
+
+      if (ADecl && !Consumer->HandleTopLevelDecl(ADecl.get()))
+        return;
+    }
+```
+
+this is the main parsing logic of the clang `Parser`.
+`ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the 
