@@ -3,6 +3,7 @@
 i welcome you to this walkthrough of the clang frontend execution!!! this walkthrough is mainly for me to dive into the clang source code, but if it helps others along the way, that’s a win!!!
 
 **note:** to get the most out of this guide, follow along with the source code open at your side and spot what’s happening in real time.
+**note:** i would not go into detail for `logging`, `error handeling`, `windows suppoort` and `objectif c specific` and this is manly a focus on c to remove some c++ overhead
 
 i've added links to the github source code in each function explanation title for convenience.
 
@@ -460,14 +461,12 @@ int foo() {
 `foobar` is in the `if` scope, which is in the `while` scope, which is in the function scope.
 
 ### **`Decl`**
-
 `Decl` is the base class for all AST nodes representing C/C++ declarations (e.g., functions, variables, classes).
 All declaration nodes (like `FunctionDecl`, `VarDecl`, `RecordDecl`) derive from `Decl`.
 
 `DeclGroupRef` is a container used when multiple declarations are parsed together (e.g., `int a, b;`).
 
 ### **`ASTContext`**
-
 `ASTContext` manages the lifetime and storage of all AST nodes and semantic information. It contains information about:
 
 main members inside the `ASTContext`
@@ -476,14 +475,9 @@ main members inside the `ASTContext`
 * `TargetInfo`
 
 ### **`ASTConsumer`**
-
 A callback interface class to observe and process AST nodes as they’re built.
 
-
-## *
-
 ### **`Parser::ModuleImportState`**
-
 An enum only for C++20 `module`/`import` that can only be placed at the start of a file. After the first declaration, the keywords `module`/`import` become normal identifiers that you can use.
 
 example
@@ -499,20 +493,26 @@ int import = 1; // valid
 
 ## **clang::ParseAST**
 
-* setup stats system
-* init Sema
-* init the `ASTConsumer` from the `Sema` so he can read the ast
-* Construct the Parser (linking Preprocessor + Sema) and register crash-recovery cleanup.
-* handle crash
-* check if lexer avaible
-* init the parsing logic
+* Setup statistics system (used for diagnostics and performance tracking)
+* Initialize `Sema`
+* Create the `ASTConsumer` from `Sema`, which will receive the AST nodes
+* Construct the `Parser`, connecting the `Preprocessor` and `Sema`
+* Register crash recovery cleanup routines
+* Ensure the lexer is available
+* init the parsing logic, this is where the first token is read and first scop set (`DeclScope`)
 * parsing logic int the HandleTopLevelDecl that in your case emit llvm ir
 * process things like pragma weak
 * finialize (need more desc)
 * print stats
 
 
+### **parsing logic**
+this is the main parsing logic of the clang `Parser`.
+
 ``` cpp
+    Parser::DeclGroupPtrTy ADecl; // tmp for the curent Decl
+    Sema::ModuleImportState ImportState; // import state for c++20
+
     for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState); !AtEOF;
          AtEOF = P.ParseTopLevelDecl(ADecl, ImportState)) {
 
@@ -520,6 +520,95 @@ int import = 1; // valid
         return;
     }
 ```
+`ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the `ImportState` for c++20
+so this boucle return a Decl and while this is not AtEOF the Decl goes to the `Consumer->HandleTopLevelDecl` that is the `ASTConsumer` that transform in to the taget in youre case ir
 
-this is the main parsing logic of the clang `Parser`.
-`ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the 
+## **Parser::ParseTopLevelDecl**
+* setup of a destructor for the Parser
+* giant switch case for special case (is there that `tok::eof` return true)
+* init the `ParsedAttributes` for gnu style attr (`__attribute__((foo))`) and c++11 style (`[[foo]]`)
+* parse the trailing attribute of both types
+* `ParseExeternalDeclaration`
+* handeling of ImportState for c++20
+
+## **Parser::ParseExeternalDeclaration**
+this function is to now if you need to redirect to `ParseDeclarationOrFunctionDefinition` or `ParseDeclaration` and handle special case like `asm` or `import`/`export`
+it could be simpilfy like this :
+
+```cpp
+    if (Tok.isEditorPlaceholder()) {
+      ConsumeToken();
+      return nullptr;
+    }
+    if (getLangOpts().IncrementalExtensions &&
+        !isDeclarationStatement(/*DisambiguatingWithExpression=*/true))
+      return ParseTopLevelStmtDecl();
+
+    // We can't tell whether this is a function-definition or declaration yet.
+    if (!SingleDecl)
+      return ParseDeclarationOrFunctionDefinition(Attrs, DeclSpecAttrs, DS);
+  }
+  // This routine returns a DeclGroup, if the thing we parsed only contains a
+  // single decl, convert it now.
+  return Actions.ConvertDeclToDeclGroup(SingleDecl);
+
+```
+
+the `ParseTopLevelStmtDecl` is for `clang-repl` so you can use c like you would with python command line
+``` c
+ ➜  ~ clang-repl
+clang-repl> #include <stdio.h>
+clang-repl> int foo = 5;
+clang-repl> printf("foo = %d\n", foo);
+foo = 5
+clang-repl> foo = 2;
+clang-repl> printf("foo = %d\n", foo);
+foo = 2
+```
+
+* `ParseDeclaration` Parses a declaration only (variables, typedefs, namespaces, inline namespaces, etc.). this is use in the big switch case
+* `ParseDeclarationOrFunctionDefinition` declaration or function body, depending on what follows the declarator.
+
+## **ParseDeclarationOrFunctionDefinition**
+the `ParsingDeclSpec (DS)` passed by `ParseExeternalDeclaration` by is set to nullptr so we are not using the `if (DS)` part.
+but first you might say what is `PasingDeclSpec` ??
+
+### **ParsingDeclSpec**
+
+As stated in the class definition, `ParsingDeclSpec` is for  parsing a `DeclSpec`:
+
+```cpp
+/// A class for parsing a DeclSpec.
+class ParsingDeclSpec : public DeclSpec {
+```
+The constructor of ParsingDeclSpec calls the parser’s getAttrFactory(), providing exactly what DeclSpec needs for initialization. The key advantage of ParsingDeclSpec is that it also creates a ParsingDeclRAIIObject to manage diagnostics—accumulating any warnings or errors during parsing and ensuring they’re either committed or discarded when the object goes out of scope.
+
+### **DeclSpec**
+okok but what is `DeclSpec` ?
+
+`DeclSpec` captures all the information about declaration specifiers:
+
+* **Storage specifiers (`SCS`)**: `typedef`, `extern`, `static`, `auto`, `register`, etc.
+* **Thread storage specifiers (`TSCS`)**: `__thread`, `thread_local`, `_Thread_local`.
+* **Type qualifiers (`TQ`)**: `const`, `volatile`, `restrict`, `atomic`, etc.
+* **attribte**
+
+Each of these categories is stored in a compact bitfield along with source-location metadata, allowing Clang to validate and diagnose specifier usage precisely.
+
+ok now back to the `ParseDeclarationOrFunctionDefinition`
+* we now init a `ObjCDeclContextSwitch ` that we don't realy care because this is for objectif-C context
+* enter `ParseDeclOrFunctionDefInternal`
+
+
+## **ParseDeclOrFunctionDefInternal****
+
+* add the attribute lisT to the `ParsingDeclSpec`
+* prepare for MS specific parsing
+* parse declaration specifier  `typedef` `extern` `static` `auto` `register` and fill the **DeclSpec**
+* switch case to end the decl if `;` is the next token  for declaration like `class foo;`, `import bar;` 
+    * the swich case return the size of the keyword for diagnostic
+    * parsing for attribute
+    * dignostic for attribute
+    * consume the `;`
+    * 
+* 
