@@ -600,15 +600,39 @@ ok now back to the `ParseDeclarationOrFunctionDefinition`
 * enter `ParseDeclOrFunctionDefInternal`
 
 
-## **ParseDeclOrFunctionDefInternal****
+## **ParseDeclOrFunctionDefInternal**
 
-* add the attribute lisT to the `ParsingDeclSpec`
+* add the `DeclSpecAttrs` (`__attribute__`) list to the `ParsingDeclSpec`
 * prepare for MS specific parsing
-* parse declaration specifier  `typedef` `extern` `static` `auto` `register` and fill the **DeclSpec**
-* switch case to end the decl if `;` is the next token  for declaration like `class foo;`, `import bar;` 
-    * the swich case return the size of the keyword for diagnostic
-    * parsing for attribute
-    * dignostic for attribute
+* parse freestanding declaration specifier  `typedef` `extern` `static` `auto` `register`, `class {}`, `struct {}` `enum {}` and fill the **DeclSpec**
+* check if missing a `;` and parse trailing arg like `attribute`
+* switch case there is a `;`
+    * the swich case return the size of the keyword for diagnostic in `LengthOfTSTToken`
+    * Suggest correct location to fix '[[attrib]] struct' to 'struct [[attrib]]'
+    * change `Attrs` (`[[attribute]]`) position if possible
     * consume the `;`
-    * 
-* 
+    * create the AST (`Sema::ParsedFreeStandingDeclSpec`)
+    * if `RecordDecl` (`struct`/`union` and `class` because `CXXRecordDecl` is a subclasse of `RecordDecl`) verify if valid
+    * create a `DeclGroupPtrTy`
+* if a struct has been parsed but not freestanding (`struct S { … } x;`) notify sema "hey, I just defined struct S,” before trying to parse x."
+* attributes before an Objective-C `@interface`/`@protocol`/`@implementation`
+* DS.abort (free RAII ParsingDeclSpec  ?)
+* add `Attrs` (`[[attribute]]`) to the `DeclSpec`
+* again object-c specific
+* Detect `extern "c"`
+* change `[[attribute]]` position if possible
+* call `ParseDeclGroup`
+
+
+
+
+
+
+
+function that need to be detail
+- `ParseDeclarationSpecifiers`
+- `DiagnoseMissingSemiAfterTagDefinition`
+- `ParsedFreeStandingDeclSpec`
+- `ActOnDefinedDeclarationSpecifier`
+
+
