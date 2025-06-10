@@ -9,6 +9,25 @@ i've added links to the github source code in each function explanation title fo
 
 # **Driver-Level Setup**
 
+```
+clang_main
+ ├─> parse driver arguments & initialize Driver
+ ├─> if -cc1 execute the compiler
+ ├─> BuildCompilation
+ │    ├─> TranslateInputArgs (raw args → TranslatedArgs)
+ │    ├─> Configure ToolChains (host & offload)
+ │    ├─> Validate flags & compute TargetTriple
+ │    ├─> Determine driver-mode (gcc/g++/cpp/clang-cl)
+ │    ├─> Plan phases (preprocess → compile → assemble → link)
+ │    ├─> create Action DAG (nodes for each compilation step)
+ │    └─> BuildJobs
+ │         └─> create Job list (Command objects)
+ └─> ExecuteCompilation
+      ├─> fork & exec each Job in DAG order (parallel where possible)
+      └─> collect exit codes & handle failures
+
+```
+
 ## **clang\_main**
 
 * **set clang_main has the bottom of the stack**
@@ -146,19 +165,21 @@ A Job is the concrete command-line execution that performs an Action defined in 
 
 **Driver::BuildJobs steps:**
 
-1. **Count outputs** (including `.ifs/.ifso` exceptions for `-o`)
-2. **Handle** Mach-O multi-arch (`-arch`) specifics
-3. **For each Action**:
-
-   * Determine `LinkingOutput` for `LipoJobAction`
-   * Call `BuildJobsForAction` to create Jobs
-4. **Disable integrated-cc1** if `C.getJobs().size() > 1`
-5. **Print stats** if `CCPrintProcessStats` is enabled
-6. **Return** based on errors or `-Qunused-arguments`
-7. **Suppress** warnings for flags like `-fdriver-only`, `-###`, etc.
-8. **Warn** on any remaining unclaimed or unsupported arguments
+* **Count outputs** (including `.ifs/.ifso` exceptions for `-o`)
+* **Handle** Mach-O multi-arch (`-arch`) specifics
+* Collect the list of architectures
+* **For each Action**:
+  * Determine `LinkingOutput` for `LipoJobAction`
+  * Call `BuildJobsForAction` to create Jobs
+* **Disable integrated-cc1** if `C.getJobs().size() > 1`
+* **Print stats** if `CCPrintProcessStats` is enabled
+* looking for an `assembler` job to set a `HasAssembleJob` bool
+* **Return** based on errors or `-Qunused-arguments`
+* **Suppress** warnings for flags like `-fdriver-only`, `-###`, etc.
+* **Warn** on any remaining unclaimed or unsupported arguments
 
 ## **ExecuteCompilation**
+> this is call in clang_main
 
 * **LogOnly mode**: if `-fdriver-only`, print jobs (`-v`) then execute in *log-only* mode.
 * **Dry run**: if `-###`, print jobs and exit based on diagnostic errors.
@@ -215,7 +236,7 @@ ok so lets resume we :
  * created actions for each part of the compilation
  * created a list of jobs from the list of actions
 
-now it's time to execute the jobs !!!
+now it's time to execute the job !!!
 
 in the begining we talk about a `if` the first args of the function is -cc1
 that it we are building guys !!!
@@ -347,6 +368,33 @@ void Lexer::Initialize(FileID FID,
 * redirect on the right cc1
 
 ## **cc1_main**
+
+```
+cc1_main
+ ├─ split & claim cc1-only flags (plugins, -mllvm, etc.)
+ ├─ initialize cc1 context
+ │    ├─ create DiagnosticIDs & DiagnosticsEngine + consumers
+ │    ├─ register PCH formats & built-in targets
+ │    └─ parse frontend/backend flags (–disable-free, –disable-llvm-verifier, –main-file-name, etc.)
+ ├─ parse remaining argv into CompilerInvocation
+ ├─ instantiate CompilerInstance CI
+ │    ├─ attach DiagnosticsEngine
+ │    ├─ set up FileManager & SourceManager
+ │    ├─ set up TargetInfo/TargetMachine
+ │    ├─ initialize Preprocessor & HeaderSearch
+ │    └─ create ASTContext & Sema
+ ├─ configure timers, timeTraceProfile & stats if requested
+ ├─ status = ExecuteCompilerInvocation(CI)
+ │    ├─ handle –help / –version
+ │    ├─ load plugins & handle –mllvm
+ │    ├─ configure sanitizers & static-analysis hooks
+ │    ├─ select & construct FrontendAction Act
+ │    ├─ CI.BeginSourceFile(Act, inputs)
+ │    ├─ CI.ExecuteAction(Act) ← Parser→Sema→CodeGen or AST walk
+ │    ├─ CI.EndSourceFile()
+ │    └─ return Act success/failure
+ └─ return status
+```
 
 * init a CompilerInstance() and a DiagnosticIDs() instance
 
