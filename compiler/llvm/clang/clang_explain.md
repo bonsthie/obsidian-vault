@@ -5,7 +5,9 @@ i welcome you to this walkthrough of the clang frontend execution!!! this walkth
 **note:** to get the most out of this guide, follow along with the source code open at your side and spot what’s happening in real time.
 **note:** i would not go into detail for `logging`, `error handeling`, `windows suppoort` and `objectif c specific` and this is manly a focus on c to remove some c++ overhead
 
-i've added links to the github source code in each function explanation title for convenience. but i recomand clone the code and folowing with your editor of choice
+i recomand watching this for a great overview of the clang frontend
+* [2019 LLVM Developers’ Meeting: S. Haastregt & A. Stulova “An overview of Clang ”](https://www.youtube.com/watch?v=5kkMpJpIGYU)
+* [The Clang AST - a tutorial](https://www.youtube.com/watch?v=VqCkCDFLSsc)
 
 # **Driver-Level Setup**
 
