@@ -591,6 +591,8 @@ this is the main parsing logic of the clang `Parser`.
 `ParseFirstTopLevelDecl` is a wrapper arround `ParseTopLevelDecl` that init the `ImportState` for c++20
 so this boucle return a Decl and while this is not AtEOF the Decl goes to the `Consumer->HandleTopLevelDecl` that is the `ASTConsumer` that transform in to the taget in youre case ir
 
+`Parser::DeclGroupPtrTy` is a pointer to a DeclGroupRef that is an interface for [those class](Decltype.md)
+
 ## **Parser::ParseTopLevelDecl**
 * setup of a destructor (RAII) for the Parser data
 * giant switch case for special case (is there that `tok::eof` return true)
@@ -637,7 +639,7 @@ foo = 2
 * `ParseDeclaration` Parses a declaration only (variables, typedefs, namespaces, inline namespaces, etc.). this is use in the big switch case
 * `ParseDeclarationOrFunctionDefinition` declaration or function body, depending on what follows the declarator.
 
-## **ParseDeclarationOrFunctionDefinition**
+## **Parser::ParseDeclarationOrFunctionDefinition**
 the `ParsingDeclSpec (DS)` passed by `ParseExeternalDeclaration` by is set to nullptr so we are not using the `if (DS)` part.
 but first you might say what is `PasingDeclSpec` ??
 
@@ -668,7 +670,7 @@ ok now back to the `ParseDeclarationOrFunctionDefinition`
 * enter `ParseDeclOrFunctionDefInternal`
 
 
-## **ParseDeclOrFunctionDefInternal**
+## **Parser::ParseDeclOrFunctionDefInternal**
 
 * add the `DeclSpecAttrs` (`__attribute__`) list to the `ParsingDeclSpec`
 * prepare for MS specific parsing
@@ -699,7 +701,7 @@ function that need to be detail
 - `ActOnDefinedDeclarationSpecifier`
 
 
-## `ParseDeclGroup`
+## `Parser::ParseDeclGroup`
 
 example of the curent state of the compiler
 
@@ -717,4 +719,73 @@ static inline void foo() {
 already consume `static inline void`
 current Token `foo`
 
+function explain :
 
+* init the `ParsedAttribute` and  `ParsingDeclarator` with current data
+* init of `SuppressAccessChecks` a RAII class to delay error for template of private class member `template <> foo<bar::foobar>`
+* `ParseDeclarator` (ex : `int x = 5;` current `;`, `int main(int ac, char av) {}` current : `{`)
+* pop out `SuppressAccessChecks` 
+* if no name parsed skip until a good place where to continue the parsing and return nullptr
+```cpp
+int /*missing name*/;  
+```
+* shader specific parsing
+* parse end of require (c++ 20)
+```cpp
+template<typename T>
+void f(T) requires std::is_integral_v<T>;  
+// The 'requires std::is_integral_v<T>' is parsed here
+```
+* if we are parsing a function
+    * parse trailing gnu `__attribute__`
+    * if the current token is `_Noreturn` create a diagnostic this can't happen
+    * if tok == `=` and next the next token is the code completion of the lsp
+    ```cpp
+    struct S {
+      S() = /*<cursor here>*/a
+    };
+    ```
+    * handle `virtual`/`override`(c++ 11)
+    ```cpp
+    struct C { void f(); };
+    // Out-of-line definition with invalid 'override'
+    void C::f() override { /*...*/ }
+    ```
+    * Determine if this is a function body or prototype if it's a function def enter the if
+    ```cpp
+    int f(int x) { return x*2; } // function def
+
+    int f(int x);  // prototype
+    ```
+        * file‐scope only
+        * handle explicit instantiation vs specialization
+        * call ParseFunctionDefinition(...)
+        * return converted DeclGroup
+* consume any attribute after declarator and attach them to `DeclaratorDecl`
+* handling C++ range-based for loops (and Obj-C for-in)
+```cpp
+for (auto &x : vec) {
+  // ...
+}
+```
+    * to continue
+* declsIncGroup to explain
+* while it's not a comma contine
+    * if this is a new line and in this context this can't be a declarator diag missing semi
+    * error on multiple template declarators
+    * D.clear(); D.setCommaLoc()
+    * parse `__attribute__` again...
+    *  if (MicrosoftExt) skip MS‐style attrs
+    * shader parsing
+* if that a valid type
+    * parse require
+    ```cpp
+
+    template<typename T>
+    void f(),                 // first declarator: no requires
+    g() requires C<T>;   // second declarator: has a trailing requires‐clause
+    ```
+* get toke location into `DeclEnd`
+* if semi and expectedsemi
+    * if any specifier skip it
+* `Actions.FinalizeDeclaratorGroup`
