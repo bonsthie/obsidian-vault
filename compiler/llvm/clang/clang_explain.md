@@ -5,12 +5,13 @@ i welcome you to this walkthrough of the clang frontend execution!!! this walkth
 **note:** to get the most out of this guide, follow along with the source code open at your side and spot what’s happening in real time.
 **note:** i would not go into detail for `logging`, `error handeling`, `windows suppoort` and `objectif c specific` and this is manly a focus on c to remove some c++ overhead
 
-i've added links to the github source code in each function explanation title for convenience.
+i've added links to the github source code in each function explanation title for convenience. but i recomand clone the code and folowing with your editor of choice
 
 # **Driver-Level Setup**
 
 ## **clang\_main**
 
+* **set clang_main has the bottom of the stack**
 * **Setup bug report message**
 * On Windows, reopen any missing `stdin`/`stdout`/`stderr` handles to `NUL`
 * **Initialize all architecture targets** (x86, ARM, AArch64, etc.)
@@ -18,7 +19,7 @@ i've added links to the github source code in each function explanation title fo
 * **Get** the program name (e.g. `bin/clang`)
 * **Determine** if arguments are MSVC-style (`clang-cl` mode)
 * **`expandResponseFiles`**: splice tokens from any `@file` entries into the argument list
-* **If** this is a `-cc1` invocation (handled later via `ExecuteCC1Tool`)
+* **If** this is a `-cc1` invocation (seen later via `ExecuteCC1Tool`)
 * **Parse early settings** like `-canonical-prefixes` / `-no-canonical-prefixes`
 * **Handle** CL-mode environment variables (`CL`, `_CL_`) for MSVC overrides
 * **Apply** `CCC_OVERRIDE_OPTIONS` overrides (e.g. `CCC_OVERRIDE_OPTIONS="# O0 +-g"`)
@@ -112,19 +113,36 @@ Compilation::Compilation(const Driver &D,
 
 ## **BuildJobs**
 
-> **Action**: An abstract compilation step (a node in the DAG).
+### **Action**:
+An abstract compilation step (a node in the DAG (Directed Acyclic Graph)). you can see them with `-ccc-print-phases`
 
 **Example:**
 
 ```bash
-clang foo.c bar.c
-```
+ ➜ clang -ccc-print-phases foo.c bar.c
 
-* **InputAction(foo.c)**: encapsulates the source file `foo.c`
-* **InputAction(bar.c)**: encapsulates the source file `bar.c`
-* **CompileJobAction(foo.c → foo.o)**: compile `foo.c`
-* **CompileJobAction(bar.c → bar.o)**: compile `bar.c`
-* **LinkJobAction(foo.o, bar.o → a.out)**: link objects
+            +- 0: input, "foo.c", c
+         +- 1: preprocessor, {0}, cpp-output
+      +- 2: compiler, {1}, ir
+   +- 3: backend, {2}, assembler
++- 4: assembler, {3}, object
+|           +- 5: input, "bar.c", c
+|        +- 6: preprocessor, {5}, cpp-output
+|     +- 7: compiler, {6}, ir
+|  +- 8: backend, {7}, assembler
+|- 9: assembler, {8}, object
+10: linker, {4, 9}, image
+ ```
+
+### **Job**
+A Job is the concrete command-line execution that performs an Action defined in Clang’s compilation DAG. you can see them with the `-ccc-print-bindings` or in detail with `-###`
+```bash
+ ➜ clang -ccc-print-bindings foo.c bar.c
+
+# "x86_64-unknown-linux-gnu" - "clang", inputs: ["foo.c"], output: "/tmp/foo-4040da.o"
+# "x86_64-unknown-linux-gnu" - "clang", inputs: ["bar.c"], output: "/tmp/bar-15d3e6.o"
+# "x86_64-unknown-linux-gnu" - "GNU::Linker", inputs: ["/tmp/foo-4040da.o", "/tmp/bar-15d3e6.o"], output: "a.out"
+```
 
 **Driver::BuildJobs steps:**
 
@@ -524,7 +542,7 @@ this is the main parsing logic of the clang `Parser`.
 so this boucle return a Decl and while this is not AtEOF the Decl goes to the `Consumer->HandleTopLevelDecl` that is the `ASTConsumer` that transform in to the taget in youre case ir
 
 ## **Parser::ParseTopLevelDecl**
-* setup of a destructor for the Parser
+* setup of a destructor (RAII) for the Parser data
 * giant switch case for special case (is there that `tok::eof` return true)
 * init the `ParsedAttributes` for gnu style attr (`__attribute__((foo))`) and c++11 style (`[[foo]]`)
 * parse the trailing attribute of both types
@@ -621,12 +639,7 @@ ok now back to the `ParseDeclarationOrFunctionDefinition`
 * again object-c specific
 * Detect `extern "c"`
 * change `[[attribute]]` position if possible
-* call `ParseDeclGroup`
-
-
-
-
-
+* call `ParseDeclGroup` for parsing function and return the result
 
 
 function that need to be detail
@@ -634,5 +647,24 @@ function that need to be detail
 - `DiagnoseMissingSemiAfterTagDefinition`
 - `ParsedFreeStandingDeclSpec`
 - `ActOnDefinedDeclarationSpecifier`
+
+
+## `ParseDeclGroup`
+
+example of the curent state of the compiler
+
+``` c
+int [[hidden]] x = 5;
+```
+already consume `int [[hidden]]`
+curent Token `x`
+
+```c
+static inline void foo() {
+    return;
+}
+```
+already consume `static inline void`
+current Token `foo`
 
 
