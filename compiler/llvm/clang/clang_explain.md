@@ -3,7 +3,7 @@
 i welcome you to this walkthrough of the clang frontend execution!!! this walkthrough is mainly for me to dive into the clang source code, but if it helps others along the way, that’s a win!!!
 
 **note:** to get the most out of this guide, follow along with the source code open at your side and spot what’s happening in real time.
-**note:** i would not go into detail for `logging`, `error handeling`, `windows suppoort` and `objectif c specific` and this is manly a focus on c to remove some c++ overhead
+**note:** i would not go into detail for `logging`, `error handeling`, `windows suppoort` and `objectif c specific` and this is manly a focus on c to remove some c++ overhead like delay template parsing detail
 
 i recomand watching this for a great overview of the clang frontend
 * [2019 LLVM Developers’ Meeting: S. Haastregt & A. Stulova “An overview of Clang ”](https://www.youtube.com/watch?v=5kkMpJpIGYU)
@@ -752,15 +752,16 @@ void f(T) requires std::is_integral_v<T>;
     void C::f() override { /*...*/ }
     ```
     * Determine if this is a function body or prototype if it's a function def enter the if
-    ```cpp
-    int f(int x) { return x*2; } // function def
-
-    int f(int x);  // prototype
-    ```
         * file‐scope only
         * handle explicit instantiation vs specialization
         * call ParseFunctionDefinition(...)
         * return converted DeclGroup
+    ```cpp
+    int f(int x) { return x*2; } // function def
+
+    int f(int x);  // prototype
+    ``` 
+    
 * consume any attribute after declarator and attach them to `DeclaratorDecl`
 * handling C++ range-based for loops (and Obj-C for-in)
 ```cpp
@@ -768,7 +769,6 @@ for (auto &x : vec) {
   // ...
 }
 ```
-    * to continue
 * declsIncGroup to explain
 * while it's not a comma contine
     * if this is a new line and in this context this can't be a declarator diag missing semi
@@ -789,3 +789,97 @@ for (auto &x : vec) {
 * if semi and expectedsemi
     * if any specifier skip it
 * `Actions.FinalizeDeclaratorGroup`
+
+
+## **Parser::ParseFunctionDefinition**
+
+* Microsoft specific  SEH (`__try`, `__except`, `__finally`) flag as illegal in func body after the parsing
+* if in c over c89 warn for missing return identifyer (this was possible in older c)
+* handle K&R-style identifier
+```c
+int sum(a, b)     // ← parameter names only
+int a;            // ← types declared separately
+int b;
+{
+    return a + b;
+}
+```
+* see if valid token (`{`, cpp only : `try`, `:`, `=`) else diag error and skip until `{` if we don't find it return nullptr
+* if `=` check for invalid `attribute`
+* if Delayed Template Parsing is enabled and is a template def (not `= default`. `= delete`)
+    * only parse the signature, cache the body tokens, and delay full parsing until later
+* else if objectif-C specific
+* set `ParseSope` to be :
+```c
+int foo() {}        // FnScope
+
+struct MyType { };  // DeclScope
+
+void foo() {
+  {                 // CompundStmtScope
+    int x = 3;  
+  }
+}
+```
+* parse c++ `= delete` or `= default` as `ActOnStartOfFunctionDef`
+* take a snapshot of the `FPF` (float precision feature) to restore it later
+```c
+void f() {
+  #pragma float_control(precise, on)
+  float x = a + b;  // precise mode
+  
+  {
+    #pragma float_control(precise, off)
+    float y = c + d;  // fast-math mode
+  }
+
+  float z = e + f;  // still in precise mode — outer setting restored
+}
+```
+* sema check if this the base of the parsing is correct
+* skip what should be skip for template delay parsing
+* clear the ParsingDeclarator RAII before body parsing
+* finish parsing for special state (ex : `= default`)
+* if use `auto` transform it into an template
+* if skip function body finish parsing and return it
+* parse `try`
+* if `:` parse `constructor`
+* parse late `__attribute__`
+* return `ParseFunctionStatementBody`
+
+## **ParseFunctionStatementBody**
+* same the `{` location for diag
+* setup RAII for c++ methode pragma internal state (mainly windows)
+* main parsing function (`ParseCompoundStatementBody`)
+* if invalid fucntion body `make a bogus compoundstmt.`
+* exit the body scope
+* return the finish body parsing
+
+## **ParseCompoundStatementBody**
+
+* make the feature RAII
+* starting pragmas
+* parse `__lablel__` (can only be at the start of a scope)
+```
+{
+  __label__ retry1;
+  __label__ retry2;
+  __label__ done1, done2;
+}
+```
+* set ParsedStmtContext to `Compound` | `InStmtExpr`
+* while not the end of the func
+    * try to parse misplace c++20 import
+    * parses redundant semicolons `;;;;;;;;;`
+    * if tok is not `__extension__` `ParseStatementOrDeclaration()`
+    * else consume all `__extension__` and parse the statement but with silences exentision warning
+    * if the last statement is valid pusj it to the stmts vector
+* check last statement
+* Emits FP evaluation method warnings for bad targets
+* Gracefully handles the closing } or missing braces
+* Builds and returns a CompoundStmt or StmtExpr via Sema
+
+
+## **ParseStatementOrDeclaration**
+to be explain
+
