@@ -888,7 +888,7 @@ to be explain
 
 We’ve parsed a complete top-level statement and now need to forward it to the backend for code generation. This section clarifies how Clang transitions from parsing to emitting IR via `CodeGenModule::EmitTopLevelDecl`:
 
-### 1. Parsing Loop (`clang::ParseAST`)
+### Parsing Loop (`clang::ParseAST`)
 
 ```cpp
 for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState);
@@ -902,9 +902,7 @@ for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState);
 * **`ParseFirstTopLevelDecl` / `ParseTopLevelDecl`**: Retrieve the next `DeclGroupRef` from the parser.
 * **`Consumer->HandleTopLevelDecl`**: Invokes the backend-specific handler with the parsed declaration.
 
----
-
-### 2. Backend Dispatch Chain
+### Backend Dispatch Chain
 
 1. **`BackendConsumer::HandleTopLevelDecl`**
 
@@ -916,9 +914,8 @@ for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState);
 
    * Final step to inspect and emit each individual `Decl`.
 
----
 
-### 3. `EmitTopLevelDecl` Dispatch Logic
+### `EmitTopLevelDecl` Dispatch Logic
 
 This function uses a large `switch` on `Decl::Kind` to select how each declaration should be emitted:
 
