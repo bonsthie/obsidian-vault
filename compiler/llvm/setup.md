@@ -2,9 +2,6 @@
 
 ## cmake flags
 
-```
-cmake -LHA
-```
 * `-L`: list all variable
 * `-H`: help
 * `-A`: all (that a lot normaly not needed)
@@ -33,6 +30,7 @@ ninja             # Build all
 ninja <target>    # Build specific target
 ninja clean       # Clean build
 ninja check       # Run tests
+```
 
 ### Useful Flags
 
