@@ -597,7 +597,7 @@ for (auto &x : vec) {
 * `Actions.FinalizeDeclaratorGroup`
 
 
-## **parser::parsefunctiondefinition**
+## **Parser::ParseFunctionDefinition**
 
 * Microsoft-specific SEH (`__try`, `__except`, `__finally`) is flagged as illegal in the function body after parsing
 * If compiling C and not in C89, warn about a missing return identifier (this was allowed in older C)
@@ -660,7 +660,7 @@ void f() {
 * Parse late `__attribute__`
 * Return `ParseFunctionStatementBody`
 
-## **parser::parsefunctionstatementbody**
+## **Parser::ParseFunctionStatementBody**
 
 * Save the `{` location for diagnostics
 * Setup RAII for C++ method pragma internal state (mainly for Windows)
@@ -669,7 +669,7 @@ void f() {
 * Exit the body scope
 * Return the finished parsed body
 
-## **parser::parsecompoundstatementbody**
+## **Parser::ParseCompoundStatementBody**
 
 * Create the feature RAII
 * Start with pragmas
