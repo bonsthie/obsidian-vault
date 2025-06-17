@@ -699,3 +699,5 @@ void f() {
 ## **ParseStatementOrDeclaration**
 
 To be explained
+
+also the sema validation
