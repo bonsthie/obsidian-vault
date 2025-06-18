@@ -175,13 +175,6 @@ cc1_main
 ```
 
 * init a CompilerInstance() and a DiagnosticIDs() instance
-
-> - CompilerInstance
->   this is the class responsible for handling the `cc1` part of clang
->   it contains all the classes needed for the compilation
-> - DiagnosticIDs
->   self-explanatory, it's the class responsible for writing compilation diagnostics
-
 * init PCH format (precompiled header)
 * init all target base functions
 * diag setup
