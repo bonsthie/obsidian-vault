@@ -356,7 +356,7 @@ int import = 1; // valid
 * Initializes the parsing logic — this is where the first token is read and the first scope is set (`DeclScope`)
 * Main parsing logic happens in `HandleTopLevelDecl`, which in your case emits LLVM IR
 * Processes things like `#pragma weak`
-* Finalizes (needs more description)
+* create the Target (ex `.o`)
 * Prints stats
 
 ### parsing logic

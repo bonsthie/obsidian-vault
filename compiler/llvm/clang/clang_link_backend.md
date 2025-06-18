@@ -72,15 +72,29 @@ for (bool AtEOF = P.ParseFirstTopLevelDecl(ADecl, ImportState);
 * Chooses `external` vs internal `linkage` based on `static`
 * Adds attributes (`nounwind`, `uwtable`, calling-conv, etc.)
 * Ensures C-name mangling but still internal linkage
-* added `comdat` + `weak_odr` on the inline function 
+* Added `comdat` + `weak_odr` on the inline function 
 * `GenerateCode`
-* set attribute
-* if a `Constructor` or `Destructor` add it to the right table
-* if OpenMP add emit target function
+* Set attribute
+* If a `Constructor` or `Destructor` add it to the right table
+* If OpenMP add emit target function
 
 ## **CodeGenFunction::GenerateCode**
 
-* build function arg list
-* handle if the function is a `inline`
-* 
-* if no debug clear all info
+* Build function arg list
+* Handle if the function is a `inline`
+* Replace inline stub with definition
+* If no debug clear all info
+* Distinguish a function definition from a proto definition
+* Find the location
+* Handle function from template
+* Handle coroutines
+* Start function
+* Switch case for multiple special case 
+    * C++ `constructor`/`destructor`/`method`...
+    * Else `EmitFunctionBody`
+* Inserting (as configured) a sanitizer check or trap and an unreachable before the closing brace
+* Finish function
+* Check if you can make the function a `not throw`
+    
+## **CodeGenFunction::EmitFunctionBody**
+To be explained
