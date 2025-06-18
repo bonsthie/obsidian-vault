@@ -140,12 +140,7 @@ void Lexer::Initialize(FileID FID,
                        bool IsAtStartOfFile);
 ```
 
-##   **ExecuteCC1Tool**
-
-* tokenize the cmd line 
-* redirect on the right cc1
-
-## **cc1_main**
+# **back to code**
 
 ```
 cc1_main
@@ -173,6 +168,13 @@ cc1_main
  │    └─ return Act success/failure
  └─ return status
 ```
+
+##   **ExecuteCC1Tool**
+
+* tokenize the cmd line 
+* redirect on the right cc1
+
+## **cc1_main**
 
 * init a CompilerInstance() and a DiagnosticIDs() instance
 * init PCH format (precompiled header)
