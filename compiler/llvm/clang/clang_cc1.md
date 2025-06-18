@@ -648,7 +648,7 @@ void f() {
 * Skip what should be skipped for delayed template parsing
 * Clear the `ParsingDeclarator` RAII before parsing the body
 * Finish parsing for special states (e.g., `= default`)
-* If using `auto`, transform it into a template
+* If using `auto`, transform it into a template by adding depth to the depth traker (this is normaly done by template <> and need to be done manulay for auto f(auto foo) in cpp 20)
 * If skipping the function body, finish parsing and return it
 * Parse `try`
 * If `:`, parse `constructor`
