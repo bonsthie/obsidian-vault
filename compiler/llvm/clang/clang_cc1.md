@@ -1,5 +1,5 @@
 # **Compiler Core `cc1`**
-
+#clang #llvm 
 ## **Going back to the clang\_start**
 
 Ok, so let's resume. We:
@@ -372,7 +372,7 @@ This is the main parsing logic of the Clang `Parser`.
 
 `ParseFirstTopLevelDecl` is a wrapper around `ParseTopLevelDecl` that initializes the `ImportState` for C++20. So this loop returns a `Decl` and while it's not `AtEOF`, the `Decl` is passed to `Consumer->HandleTopLevelDecl`, which is the `ASTConsumer` that transforms it to the target — in your case, IR.
 
-`Parser::DeclGroupPtrTy` is a pointer to a `DeclGroupRef`, which is an interface for [these classes](Decltype.md).
+`Parser::DeclGroupPtrTy` is a pointer to a `DeclGroupRef`, which is an interface for [these classes](clang%20Decltype.md).
 
 ## Parser::ParseTopLevelDecl
 

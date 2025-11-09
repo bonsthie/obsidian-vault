@@ -1,3 +1,4 @@
+#compiler #llvm #clang
 ## Understanding `-W`: How Clang and GCC Pass Options Internally
 
 When using GCC or Clang, it's common to see flags like `-Wl`, `-Wa`, or `-Wp`. These are used to pass specific options to the linker, assembler, or preprocessor, respectively. Understanding how these flags work requires understanding the **multi-layer architecture** of the compiler toolchain.

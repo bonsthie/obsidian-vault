@@ -4,31 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "8d15d8761213d6f7",
+        "id": "b85458765464424a",
         "type": "tabs",
         "children": [
           {
-            "id": "2d6a44c7bf9d145d",
+            "id": "becdbc7a13b8f5fd",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
+                "file": "books read.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "1 - Deferred Initialization"
+              "title": "books read"
             }
           },
           {
-            "id": "03e3956f6c21fa51",
+            "id": "f534664eb1266e17",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE"
             }
           }
         ],
@@ -89,7 +93,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "c3abb0109849f4b0",
@@ -123,12 +127,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from index"
+              "title": "Outgoing links"
             }
           },
           {
@@ -138,7 +141,9 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-tags",
               "title": "Tags"
@@ -150,20 +155,25 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Untitled.md"
+                "file": "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Untitled"
+              "title": "Outline of ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -172,37 +182,49 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "03e3956f6c21fa51",
+  "active": "f534664eb1266e17",
   "lastOpenFiles": [
-    "tls.md",
-    "glibc/pthread/pthread_create (glibc)/2 - Thread Attribute Handling.md",
+    "books/LLVM_CODEGEN/GlobalISel Legalization Helpers Cheat Sheet with Examples.md",
+    "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
+    "books/ARM_ASSEMBLY_AND_REVERS/arm_trusted_zone_level.png",
+    "books/ARM_ASSEMBLY_AND_REVERS/arm_arch_level.png",
+    "Untitled.base",
+    "Untitled.md",
+    "books read.md",
     "index.md",
+    "2025-11-08.md",
+    "Untitled 16.base",
+    "Untitled 6.base",
+    "Untitled 2.base",
+    "Untitled.canvas",
+    "random write_ups/ELF Expalin.md",
+    "Untitled 2.canvas",
+    "Untitled 15.base",
+    "Untitled 14.base",
+    "Untitled 13.base",
+    "Untitled 12.base",
+    "Untitled 11.base",
+    "Untitled 10.base",
+    "Untitled 1.canvas",
+    "write ups.md",
+    "books/LLVM_CODEGEN/LLVM CODE GENERATION NOTE.md",
+    "LLVM CODE GENERATION NOTE.md",
+    "compiler/llvm/clang/clang_explain.md",
+    "compiler/llvm/llvm Cheat Sheet.md",
+    "books/LLVM_CodeGen/IrCreation/README.md",
+    "books/LLVM_CodeGen/LLVM Code Generation NOTE.md",
+    "linux/thread debugging.md",
+    "books/LLVM_CodeGen/td-cheat-sheet.md",
+    "books/LLVM_CodeGen/ClassCheatSheet.md",
+    "books/LLVM_CodeGen/GISelTye.md",
+    "books/LLVM_CodeGen/legalization.md",
+    "linux/elf info.md",
+    "linux/TCB.md",
+    "random write_ups/42 -- Why the 200 philo limit.md",
     "glibc/pthread/pthread_create (glibc)/0 - pthread_create (glibc) explain.md",
-    "glibc/pthread/pthread_create (glibc)/1 - Deferred Initialization.md",
-    "glibc/pthread/pthread_create (glibc)/4 - TCB and Thread Descriptor Initialization.md",
-    "glibc/pthread/pthread_create (glibc)/5 - Scheduling Parameter Determination.md",
-    "glibc/pthread/allocate_stack_thread_code.md",
-    "glibc/pthread/allocate_stack_thread.md",
-    "glibc/pthread/pthread_create (glibc)/3 - Stack and Thread Descriptor Allocation.md",
-    "cntr.md",
-    "glibc/__nptl_setxid_sighandler.md",
-    "glibc/ntpl folder.md",
-    "UID GID.md",
-    "glibc/__libc_setup_tls.md",
-    "elf.md",
-    "glibc/pthread/pthread_create (glibc)/7 - Thread Creation and Debug Event Reporting.md",
-    "glibc/__libc_setup_tls_code.md",
-    "glibc/csu folder.md",
-    "TCB.md",
-    "glibc/pthread/pthread_create (glibc)/pthread_create (glibc) code.md",
-    "glibc/pthread/pthread_create (glibc)/8 - Post-Creation Signal Restoration and Error Handling.md",
-    "glibc/pthread/pthread_create (glibc)/6 - Thread Count Management and Signal Blocking.md",
-    "glibc/init_static_tls.md",
-    "glibc/pthread/pthread_create (glibc)/9 - Finalization and Cleanup.md",
-    "().md",
-    "glibc",
-    "glibc/pthread/pthread_create (glibc)",
-    "pthread_create deferred Initialization",
-    "glibc/pthread"
+    "random write_ups/asset/image.png",
+    "random write_ups/asset/image 1.png",
+    "pthread_create (glibc).md",
+    "compiler/llvm/clang/clang_driver.md"
   ]
 }

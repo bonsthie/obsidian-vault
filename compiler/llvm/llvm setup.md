@@ -1,3 +1,4 @@
+#llvm
 # compilation
 
 ## cmake flags
@@ -31,6 +32,7 @@ ninja             # Build all
 ninja <target>    # Build specific target
 ninja clean       # Clean build
 ninja check       # Run tests
+ninja intrinsics_gen #gen the TableGen file
 ```
 
 ### Useful Flags

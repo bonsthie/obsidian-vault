@@ -1,3 +1,4 @@
+#clang #llvm 
 # **Backend Link**
 
 We’ve parsed a complete top-level statement and now need to forward it to the backend for code generation. This section clarifies how Clang transitions from parsing to emitting IR via `CodeGenModule::EmitTopLevelDecl`:
