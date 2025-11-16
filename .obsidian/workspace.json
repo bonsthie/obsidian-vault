@@ -4,25 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "b85458765464424a",
+        "id": "57f83149669a443c",
         "type": "tabs",
         "children": [
           {
-            "id": "becdbc7a13b8f5fd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "books read.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "books read"
-            }
-          },
-          {
-            "id": "f534664eb1266e17",
+            "id": "e4cfb14d03a66406",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -33,6 +19,20 @@
               },
               "icon": "lucide-file",
               "title": "ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE"
+            }
+          },
+          {
+            "id": "9dd609cfce206f58",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "arm/arm power efficient.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "arm power efficient"
             }
           }
         ],
@@ -109,16 +109,17 @@
             "state": {
               "type": "backlink",
               "state": {
-                "collapseAll": true,
+                "file": "arm/arm power efficient.md",
+                "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
-                "showSearch": false,
+                "showSearch": true,
                 "searchQuery": "",
                 "backlinkCollapsed": true,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for arm power efficient"
             }
           },
           {
@@ -127,11 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "linksCollapsed": false,
+                "file": "arm/arm power efficient.md",
+                "linksCollapsed": true,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from arm power efficient"
             }
           },
           {
@@ -141,7 +143,7 @@
               "type": "tag",
               "state": {
                 "sortOrder": "frequency",
-                "useHierarchy": true,
+                "useHierarchy": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
@@ -155,13 +157,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
+                "file": "arm/arm power efficient.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE"
+              "title": "Outline of arm power efficient"
             }
           }
         ],
@@ -182,15 +184,24 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "f534664eb1266e17",
+  "active": "9dd609cfce206f58",
   "lastOpenFiles": [
-    "books/LLVM_CODEGEN/GlobalISel Legalization Helpers Cheat Sheet with Examples.md",
     "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
-    "books/ARM_ASSEMBLY_AND_REVERS/arm_trusted_zone_level.png",
+    "arm/arm power efficient.md",
+    "books/ARM_ASSEMBLY_AND_REVERS/arm_process_instr_mapping.png",
+    "ARM ASSEMBLY INTERNALS REVERSE ENGINEERING NOTE.md",
+    "ARM_ASSEMBLY_AND_REVERS%2FARM ASSEMBLY INTERNALS REVERSE ENGINEERING NOTE.md",
+    "books read.md",
+    "write ups.md",
     "books/ARM_ASSEMBLY_AND_REVERS/arm_arch_level.png",
+    "ARM_ASSEMBLY_AND_REVERS%2FARM ASSEMBLY INTERNALS %26 REVERSE ENGINEERING NOTE.md",
+    "arm",
+    "linux/linux bug/Bluetooth connect failed br-connection-profile-unavailable..md",
+    "linux/linux bug",
+    "books/ARM_ASSEMBLY_AND_REVERS/arm_trusted_zone_level.png",
     "Untitled.base",
     "Untitled.md",
-    "books read.md",
+    "books/LLVM_CODEGEN/GlobalISel Legalization Helpers Cheat Sheet with Examples.md",
     "index.md",
     "2025-11-08.md",
     "Untitled 16.base",
@@ -203,10 +214,7 @@
     "Untitled 14.base",
     "Untitled 13.base",
     "Untitled 12.base",
-    "Untitled 11.base",
-    "Untitled 10.base",
     "Untitled 1.canvas",
-    "write ups.md",
     "books/LLVM_CODEGEN/LLVM CODE GENERATION NOTE.md",
     "LLVM CODE GENERATION NOTE.md",
     "compiler/llvm/clang/clang_explain.md",
@@ -219,12 +227,7 @@
     "books/LLVM_CodeGen/GISelTye.md",
     "books/LLVM_CodeGen/legalization.md",
     "linux/elf info.md",
-    "linux/TCB.md",
-    "random write_ups/42 -- Why the 200 philo limit.md",
-    "glibc/pthread/pthread_create (glibc)/0 - pthread_create (glibc) explain.md",
     "random write_ups/asset/image.png",
-    "random write_ups/asset/image 1.png",
-    "pthread_create (glibc).md",
-    "compiler/llvm/clang/clang_driver.md"
+    "random write_ups/asset/image 1.png"
   ]
 }
