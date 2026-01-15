@@ -11,8 +11,12 @@ The book also does an excellent job covering OS fundamentals and includes a grea
 i not finish reading but you will be able to find my note [here](ARM%20ASSEMBLY%20INTERNALS%20&%20REVERSE%20ENGINEERING%20NOTE)
 
 ## [SSA BASE COMPILER DESIGN](https://link.springer.com/book/10.1007/978-3-030-80515-9)
-i'm really at the start start of this book. This will be to learn in more detail about ssa and make the ssa form for the [scc](index#SCC%20--%20SIMPL%20C%20Compiler) compiler
+I'm really at the very start of this book. This will help me learn in more detail about SSA and create the SSA form for the [SCC](index#SCC%20--%20SIMPL%20C%20Compiler) compiler. This book excites me a lot, but for now I have two other books to finish before starting it. To be honest, the main reason I haven't read it yet is that it's the only book I don't have in paper.
 
+## [Performance Analysis and Tuning on Modern CPUs](https://www.amazon.com/Performance-Analysis-Tuning-Modern-CPUs/dp/B0DMVQ1QDD)
+I’ve only read about one third of this book, and it has already helped me solidify my understanding of CPU architecture. It’s a shame that no one wanted to publish it, because even unfinished, it is one of the books that has taught me the most.
+
+[[Performance Analysis and Tuning on Modern CPUs Note|Note]]
 
 # FINISH
 ---
@@ -26,7 +30,7 @@ Before reading this book, I thought the IR was completely architecture-agnostic 
 you can find my note [here](LLVM%20CODE%20GENERATION%20NOTE)
 
 ## [# Intel Xeon Phi Processor High Performance Programming, 2nd Edition](https://www.oreilly.com/library/view/intel-xeon-phi/9780128091951/)
-I read this book because we acceier 12 xeon phi node for a project of HPC that aim to run I read this book because we received 12 Xeon Phi nodes for an HPC project aimed at running optimized black hole simulations on this small cluster. Sadly, the project never saw the light of day -- but that didn’t stop me from diving into the architecture anyway!
+I read this book because we received 12 Xeon Phi nodes for an HPC project aimed at running optimized black hole simulations on this small cluster. Sadly, the project never saw the light of day -- but that didn’t stop me from diving into the architecture anyway!
 
 This book was both interesting and frustrating. Sometimes it spends ten pages explaining very basic concepts, and then suddenly introduces an advanced one in just ten lines. Still, I really enjoyed the first part It was my first exposure to the concept of NUMA, which turns out to be _really_ important on a 64-core CPU.
 

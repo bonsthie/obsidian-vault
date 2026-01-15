@@ -8,35 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "e4cfb14d03a66406",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE"
-            }
-          },
-          {
             "id": "9dd609cfce206f58",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "arm/arm power efficient.md",
+                "file": "books/perf_analysis/Performance Analysis and Tuning on Modern CPUs Note.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "arm power efficient"
+              "title": "Performance Analysis and Tuning on Modern CPUs Note"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -157,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "arm/arm power efficient.md",
+                "file": "books/perf_analysis/Performance Analysis and Tuning on Modern CPUs Note.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of arm power efficient"
+              "title": "Outline of Performance Analysis and Tuning on Modern CPUs Note"
             }
           }
         ],
@@ -187,16 +172,28 @@
   "active": "9dd609cfce206f58",
   "lastOpenFiles": [
     "books read.md",
-    "write ups.md",
+    "books/perf_analysis/Performance Analysis and Tuning on Modern CPUs Note.md",
+    "Performance Analysis and Tuning on Modern CPUs Note.md",
     "index.md",
-    "arm/arm power efficient.md",
-    "Untitled.canvas",
-    "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
-    "arm/test.md",
-    "arm/arm power efficient.md",
     "books/LLVM_CODEGEN/LLVM CODE GENERATION NOTE.md",
-    "books/ARM_ASSEMBLY_AND_REVERS/arm_arch_level.png",
+    "books/perf_analysis",
     "books/ARM_ASSEMBLY_AND_REVERS/arm_process_instr_mapping.png",
+    "books/ARM_ASSEMBLY_AND_REVERS/arm_arch_level.png",
+    "books/ARM_ASSEMBLY_AND_REVERS/ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE.md",
+    "arm/arm power efficient.md",
+    "linux/thread debugging.md",
+    "write ups.md",
+    "random write_ups/ELF Expalin.md",
+    "random write_ups/42 -- Why the 200 philo limit.md",
+    "compiler/llvm/clang/clang_driver.md",
+    "compiler/llvm/clang/clang_explain.md",
+    "linux/elf dynamic relocation.md",
+    "Untitled 2.base",
+    "Untitled 3.base",
+    "Untitled 1.base",
+    "Untitled.base",
+    "Untitled.canvas",
+    "arm/test.md",
     "ARM ASSEMBLY INTERNALS REVERSE ENGINEERING NOTE.md",
     "ARM_ASSEMBLY_AND_REVERS%2FARM ASSEMBLY INTERNALS REVERSE ENGINEERING NOTE.md",
     "ARM_ASSEMBLY_AND_REVERS%2FARM ASSEMBLY INTERNALS %26 REVERSE ENGINEERING NOTE.md",
@@ -204,29 +201,18 @@
     "linux/linux bug/Bluetooth connect failed br-connection-profile-unavailable..md",
     "linux/linux bug",
     "books/ARM_ASSEMBLY_AND_REVERS/arm_trusted_zone_level.png",
-    "Untitled.base",
     "Untitled.md",
     "books/LLVM_CODEGEN/GlobalISel Legalization Helpers Cheat Sheet with Examples.md",
     "2025-11-08.md",
     "Untitled 16.base",
     "Untitled 6.base",
-    "Untitled 2.base",
-    "random write_ups/ELF Expalin.md",
     "Untitled 2.canvas",
     "Untitled 15.base",
-    "Untitled 14.base",
-    "Untitled 13.base",
-    "Untitled 12.base",
     "Untitled 1.canvas",
     "LLVM CODE GENERATION NOTE.md",
-    "compiler/llvm/clang/clang_explain.md",
     "compiler/llvm/llvm Cheat Sheet.md",
     "books/LLVM_CodeGen/IrCreation/README.md",
     "books/LLVM_CodeGen/LLVM Code Generation NOTE.md",
-    "linux/thread debugging.md",
-    "books/LLVM_CodeGen/td-cheat-sheet.md",
-    "books/LLVM_CodeGen/ClassCheatSheet.md",
-    "books/LLVM_CodeGen/GISelTye.md",
     "random write_ups/asset/image.png",
     "random write_ups/asset/image 1.png"
   ]
