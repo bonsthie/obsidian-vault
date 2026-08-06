@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Operators and Values"
+title: Operators
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Operators and Values
+# Operators
 
-> [!info] Dictionary part 2 of 8 · Previous: [[math/01 - Foundations|Foundations]] · [[math/index|Index]] · Next: [[math/03 - Functions and Optimization|Functions and Optimization]]
+> [!info] Part 2 of 8 · Previous: [[math/01-basics|Basics]] · [[math/index|Index]] · Next: [[math/03-functions|Functions]]
 
 ## 7. Sums and products
 
@@ -335,4 +335,3 @@ $$
 $$
 
 ---
-

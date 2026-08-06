@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Proofs and Mathematical Statements"
+title: Proofs
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Proofs and Mathematical Statements
+# Proofs
 
-> [!info] Dictionary part 7 of 8 · Previous: [[math/06 - Algorithms Languages and Types|Algorithms, Languages, and Types]] · [[math/index|Index]] · Next: [[math/08 - Formula Reading Reference|Formula Reading Reference]]
+> [!info] Part 7 of 8 · Previous: [[math/06-cs|CS Notation]] · [[math/index|Index]] · Next: [[math/08-reference|Reference]]
 
 ## 28. Proof vocabulary
 
@@ -248,4 +248,3 @@ $$
 means all $x$ such that $P(x)$.
 
 ---
-

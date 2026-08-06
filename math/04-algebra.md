@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Algebra and Graphs"
+title: "Algebra & Graphs"
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Algebra and Graphs
+# Algebra & Graphs
 
-> [!info] Dictionary part 4 of 8 · Previous: [[math/03 - Functions and Optimization|Functions and Optimization]] · [[math/index|Index]] · Next: [[math/05 - Sequences Complexity and Probability|Sequences, Complexity, and Probability]]
+> [!info] Part 4 of 8 · Previous: [[math/03-functions|Functions]] · [[math/index|Index]] · Next: [[math/05-sequences|Sequences]]
 
 ## 19. Fractions
 
@@ -152,4 +152,3 @@ $$
 $$
 
 ---
-

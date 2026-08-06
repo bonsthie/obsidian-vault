@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Functions and Optimization"
+title: "Functions & Optimization"
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Functions and Optimization
+# Functions & Optimization
 
-> [!info] Dictionary part 3 of 8 · Previous: [[math/02 - Operators and Values|Operators and Values]] · [[math/index|Index]] · Next: [[math/04 - Algebra and Graphs|Algebra and Graphs]]
+> [!info] Part 3 of 8 · Previous: [[math/02-operators|Operators]] · [[math/index|Index]] · Next: [[math/04-algebra|Algebra]]
 
 ## 13. Functions
 
@@ -298,4 +298,3 @@ Choose the earliest deadline satisfying the condition.
 > $T(\mathcal P)$ is the earliest integer turn at which the combined capacity of the compatible paths is sufficient to deliver all $N$ ants.
 
 ---
-

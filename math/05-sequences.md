@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Sequences, Complexity, and Probability"
+title: "Sequences & Probability"
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Sequences, Complexity, and Probability
+# Sequences & Probability
 
-> [!info] Dictionary part 5 of 8 · Previous: [[math/04 - Algebra and Graphs|Algebra and Graphs]] · [[math/index|Index]] · Next: [[math/06 - Algorithms Languages and Types|Algorithms, Languages, and Types]]
+> [!info] Part 5 of 8 · Previous: [[math/04-algebra|Algebra]] · [[math/index|Index]] · Next: [[math/06-cs|CS Notation]]
 
 ## 22. Sequence and recurrence notation
 
@@ -150,4 +150,3 @@ $$
 This is a probability-weighted average, not necessarily a value that actually occurs.
 
 ---
-

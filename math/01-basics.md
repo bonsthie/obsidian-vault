@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Foundations"
+title: Math Basics
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Foundations
+# Math Basics
 
-> [!info] Dictionary part 1 of 8 · [[math/index|Index]] · Next: [[math/02 - Operators and Values|Operators and Values]]
+> [!info] Part 1 of 8 · [[math/index|Index]] · Next: [[math/02-operators|Operators]]
 
 ## How to read an unfamiliar formula
 
@@ -381,4 +381,3 @@ i\in\{1,2,\ldots,k\}
 $$
 
 ---
-

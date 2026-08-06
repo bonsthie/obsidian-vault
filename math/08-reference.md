@@ -1,14 +1,14 @@
 ---
-title: "Mathematical Notation — Formula Reading Reference"
+title: Reference
 tags:
   - mathematics
   - computer-science
   - reference
 ---
 
-# Mathematical Notation — Formula Reading Reference
+# Reference
 
-> [!info] Dictionary part 8 of 8 · Previous: [[math/07 - Proofs and Mathematical Statements|Proofs and Mathematical Statements]] · [[math/index|Index]]
+> [!info] Part 8 of 8 · Previous: [[math/07-proofs|Proofs]] · [[math/index|Index]]
 
 ## 33. Greek-letter quick reference
 
@@ -301,4 +301,3 @@ $$
 - **Next operation:** take the largest value with $\max_i$
 - **Outer operation:** choose the allocation minimizing that maximum
 - **Conclusion:** best possible finishing time
-
