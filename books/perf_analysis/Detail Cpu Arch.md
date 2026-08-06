@@ -1,9 +1,12 @@
  ## Frontend
 ![[Block diagram of a CPU Frontend core.png]]
 
-```mehrmaid
+
+![[frontend graph.svg|697]]
+
+```
 graph TD
-  subgraph Phase1_The_Map_Cache
+  subgr[]()aph Phase1_The_Map_Cache
     A["Current PC (Instruction Pointer)"] --> B{"BTB (Branch Target Buffer)<br/>Have we been here before?"}
     B -->|Hit| B1["Predict exact target address instantly"]
     B -->|Miss| B2["Guess we just go to the next line"]

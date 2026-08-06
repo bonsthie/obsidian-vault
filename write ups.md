@@ -1,6 +1,7 @@
 ## [Clang walkthrough](clang_explain)
 A write-up exploring the Clang main path to better understand how the Clang frontend works.
 
+## old
 ## [42 -- Why the 200 philo limit](42%20--%20Why%20the%20200%20philo%20limit)
 Show reason why there is a limit of thread on the philo project at 41 school
 

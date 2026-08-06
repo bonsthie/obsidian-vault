@@ -470,3 +470,94 @@ To collect performance metrics, I used the toplev.py script from Andi Kleen’s 
 ### 5. System Limits
 - **DRAM Bandwidth:** Compare your measured GB/s against your RAM’s theoretical max.
     - If you are near the limit (~70-80%+), adding more threads will actually **slow down** the program due to contention (CloverLeaf).
+
+---
+# Analysis Approches
+
+## Code Instrumentation
+adding additional code or tools to your application to collect data about its performance, behavior, and usage
+
+```c
+#include <stdio.h>
+#include <time.h>
+
+void complex_algorithm() {
+    clock_t start = clock(); // Instrumentation: Start point
+
+    // ... actual application logic ...
+
+    clock_t end = clock();   // Instrumentation: End point
+    double cpu_time = ((double) (end - start)) / CLOCKS_PER_SEC;
+    
+    printf("Metric - Execution Time: %f seconds\n", cpu_time);
+}
+```
+
+### Binary Instrumentation
+modifies the compiled executable itself. You don't need the original source code; you inject "analysis code" directly into the machine instructions.
+
+#### How it Works
+Intercepts program execution at specific events to generate new instrumented code, allowing runtime data collection.
+#### **Key Tools:** 
+- **Intel Pin** (highly popular)
+- **Intel SDE** (Software Development Emulator, built on Pin)
+- **DynamoRIO**
+
+#### What it Collects:
+- Instruction mix analysis
+- Intercepted function calls and specific instructions      
+- Memory intensity and footprint
+#### Limitations:
+It only instruments user-level code and can cause the program to run very slowly.
+
+## Tracing
+The process of recording a detailed, chronological log of specific events that occur while a program is executing.
+
+example : **strace**
+
+### Performance Monitoring Counters (PMCs)
+- **Definition:** Dedicated hardware registers inside the CPU that can be programmed to track specific low-level hardware events (e.g., cache misses, branch mispredictions, or instructions executed).
+    
+- **Hardware Limitation:** CPUs only have a limited, fixed number of physical PMCs available to use at any given time (typically around 12, depending on the architecture).
+    
+- **Multiplexing:** If you need to track more events than there are physical PMCs available, profiling tools use a technique called multiplexing.
+    
+- **How Multiplexing Works:** The tool rapidly rotates (time-shares) the available physical counters across all the requested events, estimating the total count for each event based on the time it was actively monitored.
+
+### Marker API
+
+Marker APIs Analyze specific, targeted code regions (not the whole app). Useful for isolating performance bugs in loops, functions, or specific RPCs. Examples: 
+- Intel VTune: `__itt_task_begin` / `__itt_task_end`
+- AMD uProf: `amdProfileResume` / `amdProfilePause`
+- libpfm4 (Linux): wrapper library around the low-level `perf_events` subsystem.
+
+libpfm4 example:
+```c
+// Conceptual example of libpfm4 usage
+pfm_initialize();
+// ... setup perf_event_attr and get event encodings ...
+int event_fd = perf_event_open(&perf_attr, 0, -1, leader_fd, 0);
+
+read(event_fd, &before, sizeof(struct read_format));
+
+complex_algorithm(); // The specific code being measured
+
+read(event_fd, &after, sizeof(struct read_format));
+
+// Delta gives exact hardware metrics for that function
+uint64_t cycles_used = after.values[1] - before.values[1];
+```
+
+### Instrumentation Overhead 
+Actively measuring code costs CPU time :
+- Local testing: `~15-20%` overhead is usually acceptable.
+- Production: Target < `1%` to `5%` maximum overhead.
+
+#### fix cost
+Ensure instrumentation relies on constant, deterministic operations (e.g., a fixed syscall) rather than variable-cost actions like dynamic memory allocation or list traversals that skew your measurements.
+#### Sampling
+Use **Sampling** (only measure a fraction of events) and **Online Algorithms** (compute math like averages on-the-fly) so you don't waste CPU cycles or memory storing data.
+#### Group Events for Atomic Reads
+Group related events to read them atomically at the exact same time, preventing "phase bias" and ensuring accurate ratios for compound metrics like IPC.
+#### Always Check for Multiplexing
+Since hardware counters are limited, always check if `time_running` < `time_enabled` to detect if the CPU is multiplexing (time-sharing) your events and estimating the counts.

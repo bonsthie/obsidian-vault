@@ -12,7 +12,7 @@ At first, I skimmed through the first three chapters, thinking I wouldn’t lear
 
 The book also does an excellent job covering OS fundamentals and includes a great section on thread debugging, which helped me improve my own thread debugging.
 
-i not finish reading but you will be able to find my note here
+[[ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE|Notes]]
 
 ## SSA BASE COMPILER DESIGN
 
@@ -26,7 +26,7 @@ I'm really at the very start of this book. This will help me learn in more detai
 
 I’ve only read about one third of this book, and it has already helped me solidify my understanding of CPU architecture. It’s a shame that no one wanted to publish it, because even unfinished, it is one of the books that has taught me the most.
 
-[[Performance Analysis and Tuning on Modern CPUs Note|Note]]
+[[Performance Analysis and Tuning on Modern CPUs Note|Notes]]
 
 # FINISHED
 
