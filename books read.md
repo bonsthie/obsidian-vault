@@ -12,7 +12,7 @@ At first, I skimmed through the first three chapters, thinking I wouldn’t lear
 
 The book also does an excellent job covering OS fundamentals and includes a great section on thread debugging, which helped me improve my own thread debugging.
 
-[[ARM ASSEMBLY INTERNALS & REVERSE ENGINEERING NOTE|Notes]]
+[[books/ARM_ASSEMBLY_AND_REVERS/index|Notes]]
 
 ## SSA BASE COMPILER DESIGN
 
@@ -26,7 +26,7 @@ I'm really at the very start of this book. This will help me learn in more detai
 
 I’ve only read about one third of this book, and it has already helped me solidify my understanding of CPU architecture. It’s a shame that no one wanted to publish it, because even unfinished, it is one of the books that has taught me the most.
 
-[[Performance Analysis and Tuning on Modern CPUs Note|Notes]]
+[[books/perf_analysis/index|Notes]]
 
 # FINISHED
 
@@ -42,7 +42,7 @@ From Chapter 9 onward, the book guides you through building a full backend from 
 
 Before reading this book, I thought the IR was completely architecture-agnostic compared to the MIR, but that’s not true -- IR passes already take into account things like target sizes and calling conventions. You can even make IR pass specially for a architecture.
 
-you can find my note [[LLVM CODE GENERATION NOTE|here]]
+you can find my note [[books/LLVM_CODEGEN/index|here]]
 
 ## # Intel Xeon Phi Processor High Performance Programming, 2nd Edition
 
