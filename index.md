@@ -17,7 +17,22 @@ On this website, you’ll find various things I’ve worked on, mostly a place f
 ---
 ## SIMPL project
 ---
-This is a GitHub foundation I started with my friend [at0m741](https://github.com/at0m741/) that aims to build a low-level ecosystem: a **libc**, **compiler**, and **kernel**.
+This is a GitHub organization I started with my friend [at0m741](https://github.com/at0m741/) that aims to build a low-level ecosystem: a **libc**, a **compiler**, etc.
+
+But since he's busy with other projects, I'm the only developer working on it for now.
+
+#### [SCC -- SIMPL C Compiler](https://github.com/bonsthie/scc)
+
+This is my solo project to learn more about compilers. The project is deliberately copying how Clang works (with my own touch ofc), so it can also serve as a way to learn more about Clang internals.
+
+For now, the goal is to make a C frontend (C89, C99, GNU89, GNU99), so in the future I can build my own backend with a custom IR and optimizations.
+
+What's currently done:
+- Main utils: ErrorManager, command-line parser, flags generator, FileManager, ADT
+- Lexer
+- Preprocessor: supports system and local includes (`include_next` is not supported yet)
+- Parser and Sema: can now parse type declarations
+
 #### [SIMPL Libc](https://github.com/SIMPLproject/SLibc)
 
 This is the most advanced part of the SIMPL project.  
@@ -33,9 +48,6 @@ This is a header-only vectorization library that uses the C preprocessor to help
 Currently it handles SSE and AVX, it still needs to be extended to NEON intrinsics.  
 This library exists mainly to simplify the libc code by providing a single implementation for vectorized algorithms. Of course this leads to slightly less aggressive hand-tuned optimizations than glibc, but for a function like `strlen` we reach ~90% of the glibc asm implementation's performance.
 
-#### SCC -- SIMPL C Compiler
-
-This is currently closed-source, but the name explains itself: it's the compiler of the SIMPL project, a C compiler that will target/use the SIMPL libc.
 
 ## LLVM work
 ---
